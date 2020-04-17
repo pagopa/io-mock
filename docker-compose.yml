@@ -1,0 +1,34 @@
+version: "3.2"
+
+services:
+
+  cosmosdb:
+    image: cosmosdb
+    env_file:
+      - env.cosmosdb
+    build:
+      context: ./
+      dockerfile: cosmosdb/Dockerfile
+    ports:
+      - ${COSMOSDB_PORT}:3000
+    networks:
+      - io-fn
+
+  fixtures:
+    image: fixtures
+    env_file:
+      - env.cosmosdb
+      - env.fixtures
+    build:
+      context: ./
+      dockerfile: fixtures/Dockerfile
+    depends_on:
+      - cosmosdb
+    networks:
+      - io-fn
+
+networks:
+  io-fn:
+    driver: bridge
+    driver_opts:
+      com.docker.network.driver.mtu: 1450
