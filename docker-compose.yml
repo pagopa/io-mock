@@ -27,6 +27,98 @@ services:
     networks:
       - io-fn
 
+  fn-admin-storage:
+    image: azurite
+    build:
+      context: ./
+      dockerfile: azurite/Dockerfile
+    ports:
+      - "10000:10000"
+      - "10001:10001"
+      - "10002:10002"
+    networks:
+      - io-fn
+
+  fn-app-storage:
+    image: azurite
+    command: ["sh", "-c", "node bin/azurite -l /opt/azurite/folder --blobPort 10003 --queuePort 10004 --tablePort 10005"]
+    ports:
+      - "10003:10003"
+      - "10004:10004"
+      - "10005:10005"
+    depends_on:
+      - fn-admin-storage
+    networks:
+      - io-fn
+
+  fn-public-storage:
+    image: azurite
+    command: ["sh", "-c", "node bin/azurite -l /opt/azurite/folder --blobPort 10006 --queuePort 10007 --tablePort 10008"]
+    ports:
+      - "10006:10006"
+      - "10007:10007"
+      - "10008:10008"
+    depends_on:
+      - fn-admin-storage
+    networks:
+      - io-fn
+
+  fn-service-storage:
+    image: azurite
+    command: ["sh", "-c", "node bin/azurite -l /opt/azurite/folder --blobPort 10009 --queuePort 10010 --tablePort 10011"]
+    ports:
+      - "10009:10009"
+      - "10010:10010"
+      - "10011:10011"
+    depends_on:
+      - fn-admin-storage
+    networks:
+      - io-fn
+
+  assets-storage:
+    image: azurite
+    command: ["sh", "-c", "node bin/azurite -l /opt/azurite/folder --blobPort 10012 --queuePort 10013 --tablePort 10014"]
+    ports:
+      - "10012:10012"
+      - "10013:10013"
+      - "10014:10014"
+    depends_on:
+      - fn-admin-storage
+    networks:
+      - io-fn
+
+  logs-storage:
+    image: azurite
+    command: ["sh", "-c", "node bin/azurite -l /opt/azurite/folder --blobPort 10015 --queuePort 10016 --tablePort 10017"]
+    ports:
+      - "10015:10015"
+      - "10016:10016"
+      - "10017:10017"
+    depends_on:
+      - fn-admin-storage
+    networks:
+      - io-fn
+
+  queue-storage:
+    image: azurite
+    command: ["sh", "-c", "node bin/azurite -l /opt/azurite/folder --blobPort 10018 --queuePort 10019 --tablePort 10020"]
+    ports:
+      - "10018:10018"
+      - "10019:10019"
+      - "10020:10020"
+    depends_on:
+      - fn-admin-storage
+    networks:
+      - io-fn
+
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - 1025:1025 # smtp server
+      - 8025:8025 # web ui
+    networks:
+      - io-fn
+
 networks:
   io-fn:
     driver: bridge
