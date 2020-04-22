@@ -111,6 +111,37 @@ services:
     networks:
       - io-fn
 
+  functions-admin:
+    image: functions-template:v2.0.0
+    build:
+      context: ./
+      dockerfile: functions/Dockerfile
+    command: ["sh", "-c", "git clone https://github.com/pagopa/io-functions-admin.git /usr/src/app && git checkout $FUNCTIONS_ADMIN_BRANCH && yarn install && yarn build && func extensions install && func start --javascript"]
+    env_file:
+      - env.cosmosdb
+      - env.functions-admin
+    working_dir: /usr/src/app
+    ports:
+      - ${FUNCTIONS_ADMIN_PORT}:7071
+    networks:
+      - io-fn
+    depends_on:
+      - fn-admin-storage
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.functions.rule=Host(`localhost`)"
+      - "traefik.http.routers.functions.entrypoints=web"
+
+      - "traefik.http.middlewares.testHeader.headers.customrequestheaders.x-user-id=unused"
+      - "traefik.http.middlewares.testHeader.headers.customrequestheaders.x-user-groups=${REQ_USER_GROUPS}"
+      - "traefik.http.middlewares.testHeader.headers.customrequestheaders.x-subscription-id=${REQ_SERVICE_ID}"
+      - "traefik.http.middlewares.testHeader.headers.customrequestheaders.x-user-email=unused@example.com"
+      - "traefik.http.middlewares.testHeader.headers.customrequestheaders.x-user-note=unused"
+      - "traefik.http.middlewares.testHeader.headers.customrequestheaders.x-functions-key=unused"
+
+      # apply middleware to route
+      - "traefik.http.routers.functions.middlewares=testHeader"
+
   mailhog:
     image: mailhog/mailhog
     ports:
