@@ -119,6 +119,20 @@ services:
     networks:
       - io-fn
 
+  traefik:
+    image: traefik:v2.0
+    command: |-
+      --entrypoints.web.address=:80
+      --providers.docker=true
+      --providers.docker.network=io-fn
+      --log.level=ERROR
+    ports:
+      - ${API_GATEWAY_PORT}:${API_GATEWAY_PORT}
+    networks:
+      - io-fn
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
 networks:
   io-fn:
     driver: bridge
