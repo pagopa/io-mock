@@ -111,15 +111,21 @@ services:
     networks:
       - io-fn
 
+  functions:
+    image: functions
+    build:
+      context: ./
+      dockerfile: functions/Dockerfile
+    command: /bin/true
+
   functions-admin:
     image: io-functions-admin
     build:
       context: ./
-      dockerfile: functions/Dockerfile
-    command: ["sh", "-c", "git clone https://github.com/pagopa/io-functions-admin.git /usr/src/app && git checkout $FUNCTIONS_ADMIN_BRANCH && yarn install && yarn build && func extensions install && func start --javascript"]
+      dockerfile: io-functions-admin/Dockerfile
     env_file:
       - env.cosmosdb
-      - env.functions-admin
+      - env.io-functions-admin
     working_dir: /usr/src/app
     ports:
       - ${FUNCTIONS_ADMIN_PORT}:7071
