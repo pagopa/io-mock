@@ -112,7 +112,7 @@ services:
       - io-fn
 
   functions-admin:
-    image: functions-template:v2.0.0
+    image: io-functions-admin
     build:
       context: ./
       dockerfile: functions/Dockerfile
