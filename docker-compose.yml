@@ -63,7 +63,7 @@ services:
     networks:
       - io-fn
 
-  fn-service-storage:
+  fn-services-storage:
     image: azurite
     command: ["sh", "-c", "node bin/azurite -l /opt/azurite/folder --blobPort 10009 --queuePort 10010 --tablePort 10011"]
     ports:
@@ -138,13 +138,6 @@ services:
       - "traefik.http.routers.functions-admin.rule=Host(`functions-admin.localhost`)"
       - "traefik.http.routers.functions-admin.entrypoints=web"
 
-      - "traefik.http.middlewares.testHeader.headers.customrequestheaders.x-user-id=unused"
-      - "traefik.http.middlewares.testHeader.headers.customrequestheaders.x-user-groups=${REQ_USER_GROUPS}"
-      - "traefik.http.middlewares.testHeader.headers.customrequestheaders.x-subscription-id=${REQ_SERVICE_ID}"
-      - "traefik.http.middlewares.testHeader.headers.customrequestheaders.x-user-email=unused@example.com"
-      - "traefik.http.middlewares.testHeader.headers.customrequestheaders.x-user-note=unused"
-      - "traefik.http.middlewares.testHeader.headers.customrequestheaders.x-functions-key=unused"
-
       # apply middleware to route
       - "traefik.http.routers.functions-admin.middlewares=testHeader"
 
@@ -188,6 +181,29 @@ services:
       - "traefik.http.routers.functions-public.rule=Host(`functions-public.localhost`)"
       - "traefik.http.routers.functions-public.entrypoints=web"
 
+  functions-services:
+    image: io-functions-services
+    build:
+      context: ./
+      dockerfile: io-functions-services/Dockerfile
+    env_file:
+      - env.cosmosdb
+      - env.io-functions-services
+    working_dir: /usr/src/app
+    ports:
+      - ${FUNCTIONS_SERVICES_PORT}:7071
+    networks:
+      - io-fn
+    depends_on:
+      - fn-services-storage
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.functions-services.rule=Host(`functions-services.localhost`)"
+      - "traefik.http.routers.functions-services.entrypoints=web"
+
+      # apply middleware to route
+      - "traefik.http.routers.functions-services.middlewares=testHeader"
+
   mailhog:
     image: mailhog/mailhog
     ports:
@@ -209,6 +225,14 @@ services:
       - io-fn
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+    labels:
+      # define middleware to be used in some functions services
+      - "traefik.http.middlewares.testHeader.headers.customrequestheaders.x-user-id=unused"
+      - "traefik.http.middlewares.testHeader.headers.customrequestheaders.x-user-groups=${REQ_USER_GROUPS}"
+      - "traefik.http.middlewares.testHeader.headers.customrequestheaders.x-subscription-id=${REQ_SERVICE_ID}"
+      - "traefik.http.middlewares.testHeader.headers.customrequestheaders.x-user-email=unused@example.com"
+      - "traefik.http.middlewares.testHeader.headers.customrequestheaders.x-user-note=unused"
+      - "traefik.http.middlewares.testHeader.headers.customrequestheaders.x-functions-key=unused"
 
 networks:
   io-fn:
