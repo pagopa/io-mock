@@ -135,8 +135,8 @@ services:
       - fn-admin-storage
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.functions.rule=Host(`localhost`)"
-      - "traefik.http.routers.functions.entrypoints=web"
+      - "traefik.http.routers.functions-admin.rule=Host(`functions-admin.localhost`)"
+      - "traefik.http.routers.functions-admin.entrypoints=web"
 
       - "traefik.http.middlewares.testHeader.headers.customrequestheaders.x-user-id=unused"
       - "traefik.http.middlewares.testHeader.headers.customrequestheaders.x-user-groups=${REQ_USER_GROUPS}"
@@ -146,7 +146,27 @@ services:
       - "traefik.http.middlewares.testHeader.headers.customrequestheaders.x-functions-key=unused"
 
       # apply middleware to route
-      - "traefik.http.routers.functions.middlewares=testHeader"
+      - "traefik.http.routers.functions-admin.middlewares=testHeader"
+
+  functions-app:
+    image: io-functions-app
+    build:
+      context: ./
+      dockerfile: io-functions-app/Dockerfile
+    env_file:
+      - env.cosmosdb
+      - env.io-functions-app
+    working_dir: /usr/src/app
+    ports:
+      - ${FUNCTIONS_APP_PORT}:7071
+    networks:
+      - io-fn
+    depends_on:
+      - fn-app-storage
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.functions-app.rule=Host(`functions-app.localhost`)"
+      - "traefik.http.routers.functions-app.entrypoints=web"
 
   mailhog:
     image: mailhog/mailhog
