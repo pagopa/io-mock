@@ -168,6 +168,26 @@ services:
       - "traefik.http.routers.functions-app.rule=Host(`functions-app.localhost`)"
       - "traefik.http.routers.functions-app.entrypoints=web"
 
+  functions-public:
+    image: io-functions-public
+    build:
+      context: ./
+      dockerfile: io-functions-public/Dockerfile
+    env_file:
+      - env.cosmosdb
+      - env.io-functions-public
+    working_dir: /usr/src/app
+    ports:
+      - ${FUNCTIONS_PUBLIC_PORT}:7071
+    networks:
+      - io-fn
+    depends_on:
+      - fn-public-storage
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.functions-public.rule=Host(`functions-public.localhost`)"
+      - "traefik.http.routers.functions-public.entrypoints=web"
+
   mailhog:
     image: mailhog/mailhog
     ports:
