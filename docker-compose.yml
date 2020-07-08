@@ -169,6 +169,7 @@ services:
     depends_on:
       - fn-app-storage
       - notificationhub
+      - fixtures
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.functions-app.rule=Host(`functions-app.localhost`)"
