@@ -111,6 +111,18 @@ services:
     networks:
       - io-fn
 
+  notificationhub:
+    image: notificationhub
+    build:
+      context: ./
+      dockerfile: io-notification-hub-mock/Dockerfile
+    env_file:
+      - env.io-notification-hub
+    ports:
+      - "30000:30000"
+    networks:
+      - io-fn
+
   functions:
     image: functions
     build:
@@ -156,6 +168,7 @@ services:
       - io-fn
     depends_on:
       - fn-app-storage
+      - notificationhub
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.functions-app.rule=Host(`functions-app.localhost`)"
