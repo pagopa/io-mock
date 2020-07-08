@@ -9,8 +9,9 @@ ARG IO_BACKEND_BRANCH
 ARG GITHUB_TOKEN
 ENV GITHUB_TOKEN=${GITHUB_TOKEN}
 
-RUN git clone https://github.com/pagopa/io-backend.git /usr/src/app && \
-         git checkout ${IO_BACKEND_BRANCH}
+RUN rm -rf * && \
+    git clone https://github.com/pagopa/io-backend.git /usr/src/app && \
+    git checkout ${IO_BACKEND_BRANCH}
 
 RUN ./scripts/init-npm.sh && ./scripts/generate-test-certs.sh certs
 
