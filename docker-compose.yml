@@ -27,90 +27,6 @@ services:
     networks:
       - io-fn
 
-  fn-admin-storage:
-    image: azurite
-    build:
-      context: ./
-      dockerfile: azurite/Dockerfile
-    ports:
-      - "10000:10000"
-      - "10001:10001"
-      - "10002:10002"
-    networks:
-      - io-fn
-
-  fn-app-storage:
-    image: azurite
-    command: ["sh", "-c", "node bin/azurite -l /opt/azurite/folder --blobPort 10003 --queuePort 10004 --tablePort 10005"]
-    ports:
-      - "10003:10003"
-      - "10004:10004"
-      - "10005:10005"
-    depends_on:
-      - fn-admin-storage
-    networks:
-      - io-fn
-
-  fn-public-storage:
-    image: azurite
-    command: ["sh", "-c", "node bin/azurite -l /opt/azurite/folder --blobPort 10006 --queuePort 10007 --tablePort 10008"]
-    ports:
-      - "10006:10006"
-      - "10007:10007"
-      - "10008:10008"
-    depends_on:
-      - fn-admin-storage
-    networks:
-      - io-fn
-
-  fn-services-storage:
-    image: azurite
-    command: ["sh", "-c", "node bin/azurite -l /opt/azurite/folder --blobPort 10009 --queuePort 10010 --tablePort 10011"]
-    ports:
-      - "10009:10009"
-      - "10010:10010"
-      - "10011:10011"
-    depends_on:
-      - fn-admin-storage
-    networks:
-      - io-fn
-
-  assets-storage:
-    image: azurite
-    command: ["sh", "-c", "node bin/azurite -l /opt/azurite/folder --blobPort 10012 --queuePort 10013 --tablePort 10014"]
-    ports:
-      - "10012:10012"
-      - "10013:10013"
-      - "10014:10014"
-    depends_on:
-      - fn-admin-storage
-    networks:
-      - io-fn
-
-  logs-storage:
-    image: azurite
-    command: ["sh", "-c", "node bin/azurite -l /opt/azurite/folder --blobPort 10015 --queuePort 10016 --tablePort 10017"]
-    ports:
-      - "10015:10015"
-      - "10016:10016"
-      - "10017:10017"
-    depends_on:
-      - fn-admin-storage
-    networks:
-      - io-fn
-
-  queue-storage:
-    image: azurite
-    command: ["sh", "-c", "node bin/azurite -l /opt/azurite/folder --blobPort 10018 --queuePort 10019 --tablePort 10020"]
-    ports:
-      - "10018:10018"
-      - "10019:10019"
-      - "10020:10020"
-    depends_on:
-      - fn-admin-storage
-    networks:
-      - io-fn
-
   notificationhub:
     image: notificationhub
     build:
@@ -137,14 +53,12 @@ services:
       dockerfile: io-functions-admin/Dockerfile
     env_file:
       - env.cosmosdb
-      - env.io-functions-admin
+      - generated-env/env.io-functions-admin
     working_dir: /usr/src/app
     ports:
       - ${FUNCTIONS_ADMIN_PORT}:7071
     networks:
       - io-fn
-    depends_on:
-      - fn-admin-storage
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.functions-admin.rule=Host(`functions-admin.localhost`)"
@@ -160,14 +74,13 @@ services:
       dockerfile: io-functions-app/Dockerfile
     env_file:
       - env.cosmosdb
-      - env.io-functions-app
+      - generated-env/env.io-functions-app
     working_dir: /usr/src/app
     ports:
       - ${FUNCTIONS_APP_PORT}:7071
     networks:
       - io-fn
     depends_on:
-      - fn-app-storage
       - notificationhub
       - fixtures
     labels:
@@ -182,14 +95,12 @@ services:
       dockerfile: io-functions-public/Dockerfile
     env_file:
       - env.cosmosdb
-      - env.io-functions-public
+      - generated-env/env.io-functions-public
     working_dir: /usr/src/app
     ports:
       - ${FUNCTIONS_PUBLIC_PORT}:7071
     networks:
       - io-fn
-    depends_on:
-      - fn-public-storage
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.functions-public.rule=Host(`functions-public.localhost`)"
@@ -202,14 +113,12 @@ services:
       dockerfile: io-functions-services/Dockerfile
     env_file:
       - env.cosmosdb
-      - env.io-functions-services
+      - generated-env/env.io-functions-services
     working_dir: /usr/src/app
     ports:
       - ${FUNCTIONS_SERVICES_PORT}:7071
     networks:
       - io-fn
-    depends_on:
-      - fn-services-storage
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.functions-services.rule=Host(`functions-services.localhost`)"
@@ -227,7 +136,7 @@ services:
        - GITHUB_TOKEN
        - IO_BACKEND_BRANCH
     env_file:
-      - env.io-backend
+      - generated-env/env.io-backend
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.functions-services.rule=Host(`backend.localhost`)"
@@ -238,8 +147,6 @@ services:
       - ${IO_BACKEND_PORT}:443
     networks:
       - io-fn
-    depends_on:
-      - logs-storage
 
   pagopa-proxy:
     image: io-pagopa-proxy
