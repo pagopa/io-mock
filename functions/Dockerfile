@@ -9,7 +9,10 @@ RUN apt-get update && \
     sh -c 'echo "deb [arch=amd64] http://packages.microsoft.com/debian/$(lsb_release -rs | cut -d'.' -f 1)/prod $(lsb_release -cs) main" > /etc/apt/sources.list.d/dotnetdev.list' && \
     apt-get update
 
-RUN apt-get install -y azure-functions-core-tools
+RUN apt-get install -y azure-functions-core-tools && \
+    apt-get install -y apt-transport-https && \
+    apt-get update && \
+    apt-get install -y dotnet-sdk-3.1
 
 ENV AzureWebJobsScriptRoot=/usr/src/app \
     AzureFunctionsJobHost__Logging__Console__IsEnabled=true

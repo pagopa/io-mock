@@ -111,6 +111,18 @@ services:
     networks:
       - io-fn
 
+  notificationhub:
+    image: notificationhub
+    build:
+      context: ./
+      dockerfile: io-notification-hub-mock/Dockerfile
+    env_file:
+      - env.io-notification-hub
+    ports:
+      - "30000:30000"
+    networks:
+      - io-fn
+
   functions:
     image: functions
     build:
@@ -156,6 +168,8 @@ services:
       - io-fn
     depends_on:
       - fn-app-storage
+      - notificationhub
+      - fixtures
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.functions-app.rule=Host(`functions-app.localhost`)"
@@ -203,6 +217,69 @@ services:
 
       # apply middleware to route
       - "traefik.http.routers.functions-services.middlewares=testHeader"
+
+  backend:
+    image: io-backend
+    build:
+      context: ./
+      dockerfile: io-backend/Dockerfile
+      args:
+       - GITHUB_TOKEN
+       - IO_BACKEND_BRANCH
+    env_file:
+      - env.io-backend
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.functions-services.rule=Host(`backend.localhost`)"
+      - "traefik.http.routers.functions-services.entrypoints=web"
+    expose: 
+      - "443"
+    ports:
+      - ${IO_BACKEND_PORT}:443
+    networks:
+      - io-fn
+    depends_on:
+      - logs-storage
+
+  pagopa-proxy:
+    image: io-pagopa-proxy
+    build:
+      context: ./
+      dockerfile: io-pagopa-proxy/Dockerfile
+      args:
+       - GITHUB_TOKEN
+       - IO_PAGOPA_PROXY_BRANCH
+    env_file:
+      - env.io-pagopa-proxy
+    ports:
+      - ${PAGOPAPROXY_PORT}:3001
+      - ${PAGOPA_PORT}:3002
+    networks:
+      - io-fn
+    depends_on:
+      - redis
+
+  redis:
+    container_name: redis
+    image: wodby/redis:3.2-2.1.5
+    ports:
+      - "6379:6379"
+    environment:
+      REDIS_TIMEOUT: 300
+      REDIS_TCP_KEEPALIVE: 60
+      REDIS_MAXMEMORY: 182m
+    networks:
+      - io-fn
+
+  spid-testenv2:
+    container_name: spid-testenv2
+    image: italia/spid-testenv2
+    ports:
+      - "8088:8088"
+    volumes:
+      - "./testenv2/conf:/app/conf:cached"
+    networks:
+      - io-fn
 
   mailhog:
     image: mailhog/mailhog
