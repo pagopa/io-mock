@@ -241,6 +241,24 @@ services:
     depends_on:
       - logs-storage
 
+  pagopa-proxy:
+    image: io-pagopa-proxy
+    build:
+      context: ./
+      dockerfile: io-pagopa-proxy/Dockerfile
+      args:
+       - GITHUB_TOKEN
+       - IO_PAGOPA_PROXY_BRANCH
+    env_file:
+      - env.io-pagopa-proxy
+    ports:
+      - ${PAGOPAPROXY_PORT}:3001
+      - ${PAGOPA_PORT}:3002
+    networks:
+      - io-fn
+    depends_on:
+      - redis
+
   redis:
     container_name: redis
     image: wodby/redis:3.2-2.1.5
