@@ -19,6 +19,6 @@ RUN yarn install && \
     yarn generate:proxy-models && \
     yarn build
 
-EXPOSE 80
+EXPOSE 443
 
 CMD ["node", "src/server.js"]
