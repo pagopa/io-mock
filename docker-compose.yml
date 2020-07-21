@@ -38,6 +38,10 @@ services:
       - "30000:30000"
     networks:
       - io-fn
+    depends_on:
+      - mailhog
+    volumes: 
+      - "./io-backend/certs:/usr/src/app/certs:cached"
 
   functions:
     image: functions
@@ -147,6 +151,8 @@ services:
       - ${IO_BACKEND_PORT}:443
     networks:
       - io-fn
+    volumes: 
+      - "./io-backend/certs:/usr/src/app/certs:cached"
 
   pagopa-proxy:
     image: io-pagopa-proxy
