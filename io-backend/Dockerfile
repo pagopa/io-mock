@@ -13,12 +13,12 @@ RUN rm -rf * && \
     git clone https://github.com/pagopa/io-backend.git /usr/src/app && \
     git checkout ${IO_BACKEND_BRANCH}
 
-RUN ./scripts/init-npm.sh && ./scripts/generate-test-certs.sh certs
+RUN ./scripts/init-npm.sh
 
 RUN yarn install && \
     yarn generate:proxy-models && \
     yarn build
 
-EXPOSE 80
+EXPOSE 443
 
 CMD ["node", "src/server.js"]

@@ -1,0 +1,24 @@
+{
+  "name": "io-mock",
+  "version": "1.0.0",
+  "repository": "git@github.com:pagopa/io-mock.git",
+  "license": "MIT",
+  "scripts": {
+    "clean": "shx rm -rf generated-env && shx mkdir generated-env",
+    "generate": "npm-run-all clean generate:*",
+    "generate:env-functions-app": "dotenv -e .env envsub env.io-functions-app generated-env/env.io-functions-app",
+    "generate:env-functions-public": "dotenv -e .env envsub env.io-functions-public generated-env/env.io-functions-public",
+    "generate:env-functions-admin": "dotenv -e .env envsub env.io-functions-admin generated-env/env.io-functions-admin",
+    "generate:env-functions-services": "dotenv -e .env envsub env.io-functions-services generated-env/env.io-functions-services",
+    "generate:env-backend": "dotenv -e .env envsub env.io-backend generated-env/env.io-backend",
+    "prestart": "npm-run-all generate",
+    "start": "docker-compose up --build -d",
+    "stop": "docker-compose down"
+  },
+  "devDependencies": {
+    "dotenv-cli": "^3.2.0",
+    "envsub": "^4.0.7",
+    "npm-run-all": "^4.1.5",
+    "shx": "^0.3.2"
+  }
+}
