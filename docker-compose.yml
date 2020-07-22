@@ -143,8 +143,8 @@ services:
       - generated-env/env.io-backend
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.functions-services.rule=Host(`backend.localhost`)"
-      - "traefik.http.routers.functions-services.entrypoints=web"
+      - "traefik.http.routers.backend.rule=Host(`backend.localhost`)"
+      - "traefik.http.routers.backend.entrypoints=web"
     expose: 
       - "443"
     ports:
