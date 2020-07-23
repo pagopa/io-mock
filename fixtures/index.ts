@@ -74,7 +74,7 @@ const serviceModel = new ServiceModel(documentClient, servicesCollectionUrl);
 
 const aService: Service = Service.decode({
   authorizedCIDRs: [],
-  authorizedRecipients: [],
+  authorizedRecipients: ["AAAAAA00A00A000A"],
   departmentName: "Department Name",
   isVisible: true,
   maxAllowedPaymentAmount: 100000,
