@@ -5,7 +5,7 @@ services:
   cosmosdb:
     image: cosmosdb
     env_file:
-      - env.cosmosdb
+      - generated-env/env.cosmosdb
     build:
       context: ./
       dockerfile: cosmosdb/Dockerfile
@@ -17,8 +17,8 @@ services:
   fixtures:
     image: fixtures
     env_file:
-      - env.cosmosdb
-      - env.fixtures
+      - generated-env/env.cosmosdb
+      - generated-env/env.fixtures
     build:
       context: ./
       dockerfile: fixtures/Dockerfile
@@ -56,7 +56,7 @@ services:
       context: ./
       dockerfile: io-functions-admin/Dockerfile
     env_file:
-      - env.cosmosdb
+      - generated-env/env.cosmosdb
       - generated-env/env.io-functions-admin
     working_dir: /usr/src/app
     ports:
@@ -77,7 +77,7 @@ services:
       context: ./
       dockerfile: io-functions-app/Dockerfile
     env_file:
-      - env.cosmosdb
+      - generated-env/env.cosmosdb
       - generated-env/env.io-functions-app
     working_dir: /usr/src/app
     ports:
@@ -98,7 +98,7 @@ services:
       context: ./
       dockerfile: io-functions-public/Dockerfile
     env_file:
-      - env.cosmosdb
+      - generated-env/env.cosmosdb
       - generated-env/env.io-functions-public
     working_dir: /usr/src/app
     ports:
@@ -116,7 +116,7 @@ services:
       context: ./
       dockerfile: io-functions-services/Dockerfile
     env_file:
-      - env.cosmosdb
+      - generated-env/env.cosmosdb
       - generated-env/env.io-functions-services
     working_dir: /usr/src/app
     ports:
@@ -143,12 +143,14 @@ services:
       - generated-env/env.io-backend
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.functions-services.rule=Host(`backend.localhost`)"
-      - "traefik.http.routers.functions-services.entrypoints=web"
+      - "traefik.http.routers.backend.rule=Host(`backend.localhost`)"
+      - "traefik.http.routers.backend.entrypoints=web"
     expose: 
       - "443"
     ports:
       - ${IO_BACKEND_PORT}:443
+      - "5859:5859"
+    command: ["yarn", "hot-reload"]
     networks:
       - io-fn
     volumes: 
