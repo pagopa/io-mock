@@ -19,10 +19,20 @@ import {
 } from "io-functions-commons/dist/src/models/service";
 import * as documentDbUtils from "io-functions-commons/dist/src/utils/documentdb";
 import { getRequiredStringEnv } from "io-functions-commons/dist/src/utils/env";
+import {
+    Aborter,
+    ContainerURL,
+    ServiceURL,
+    SharedKeyCredential,
+    StorageURL
+} from "@azure/storage-blob";
 
 const cosmosDbKey = getRequiredStringEnv("COSMOSDB_KEY");
 const cosmosDbUri = getRequiredStringEnv("COSMOSDB_URI");
 const cosmosDbName = getRequiredStringEnv("COSMOSDB_NAME");
+
+const STORAGE_ACCOUNT_NAME = getRequiredStringEnv("STORAGE_ACCOUNT_NAME");
+const ACCOUNT_ACCESS_KEY = getRequiredStringEnv("STORAGE_ACCOUNT_KEY");
 
 const documentDbDatabaseUrl = documentDbUtils.getDatabaseUri(cosmosDbName);
 
@@ -39,6 +49,23 @@ function createDatabase(databaseName: string): Promise<Either<Error, void>> {
       resolve(right<Error, void>(void 0));
     });
   });
+}
+
+async function createBlobContainer(containerName: string): Promise<Either<Error, any>> {
+  try {
+    const credentials = new SharedKeyCredential(STORAGE_ACCOUNT_NAME, ACCOUNT_ACCESS_KEY);
+    const pipeline = StorageURL.newPipeline(credentials);
+    console.log(`https://${STORAGE_ACCOUNT_NAME}.blob.core.windows.net`);
+    const serviceURL = new ServiceURL(`https://${STORAGE_ACCOUNT_NAME}.blob.core.windows.net`, pipeline);
+    
+    const containerURL = ContainerURL.fromServiceURL(serviceURL, containerName);
+    
+    const aborter = Aborter.timeout(60 * 1000);
+    await containerURL.create(aborter);
+    console.log(`Container: "${containerName}" is created`);
+  } catch (err) {
+    return left(err);
+  }
 }
 
 function createCollection(
@@ -118,5 +145,7 @@ createDatabase(cosmosDbName)
   .then(s => console.log(s.value))
   .then(() => profileModel.create(aProfile, aProfile.fiscalCode))
   // tslint:disable-next-line: no-console
+  .then(p => console.log(p.value))
+  .then(() => createBlobContainer("message-content"))
   .then(p => console.log(p.value))
   .catch(console.error);

@@ -18,7 +18,7 @@ services:
     image: fixtures
     env_file:
       - env.cosmosdb
-      - env.fixtures
+      - generated-env/env.fixtures
     build:
       context: ./
       dockerfile: fixtures/Dockerfile
@@ -149,6 +149,8 @@ services:
       - "443"
     ports:
       - ${IO_BACKEND_PORT}:443
+      - "5859:5859"
+    command: ["yarn", "hot-reload"]
     networks:
       - io-fn
     volumes: 
