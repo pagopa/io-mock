@@ -139,6 +139,25 @@ services:
 
       # apply middleware to route
       - "traefik.http.routers.functions-services.middlewares=testHeader"
+  functions-bonus:
+    image: io-functions-bonus
+    build:
+      context: ./
+      dockerfile: io-functions-bonus/Dockerfile
+      args:
+        - FUNCTIONS_BONUS_BRANCH
+    env_file:
+      - generated-env/env.cosmosdb
+      - generated-env/env.io-functions-bonus
+    working_dir: /usr/src/app
+    ports:
+      - ${FUNCTIONS_BONUS_PORT}:7071
+    networks:
+      - io-fn
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.functions-bonus.rule=Host(`functions-bonus.localhost`)"
+      - "traefik.http.routers.functions-bonus.entrypoints=web"
 
   backend:
     image: io-backend

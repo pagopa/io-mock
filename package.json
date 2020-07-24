@@ -10,6 +10,7 @@
     "generate:env-functions-public": "dotenv -e .env envsub env.io-functions-public generated-env/env.io-functions-public",
     "generate:env-functions-admin": "dotenv -e .env envsub env.io-functions-admin generated-env/env.io-functions-admin",
     "generate:env-functions-services": "dotenv -e .env envsub env.io-functions-services generated-env/env.io-functions-services",
+    "generate:env-functions-bonus": "dotenv -e .env envsub env.io-functions-bonus generated-env/env.io-functions-bonus",
     "generate:env-backend": "dotenv -e .env envsub env.io-backend generated-env/env.io-backend",
     "generate:env-fixtures": "dotenv -e .env envsub env.io-fixtures generated-env/env.io-fixtures",
     "generate:env-cosmosdb": "dotenv -e .env envsub env.cosmosdb generated-env/env.cosmosdb",
