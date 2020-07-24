@@ -140,6 +140,7 @@ createDatabase(cosmosDbName)
   .then(() => createCollection("profiles", "fiscalCode"))
   .then(() => createCollection("sender-services", "recipientFiscalCode"))
   .then(() => createCollection("services", "serviceId"))
+  .then(() => createCollection("user-data-processing", "fiscalCode"))
   .then(() => serviceModel.create(aService, aService.serviceId))
   // tslint:disable-next-line: no-console
   .then(s => console.log(s.value))
@@ -147,5 +148,6 @@ createDatabase(cosmosDbName)
   // tslint:disable-next-line: no-console
   .then(p => console.log(p.value))
   .then(() => createBlobContainer("message-content"))
+  .then(() => createBlobContainer("user-data"))
   .then(p => console.log(p.value))
   .catch(console.error);
