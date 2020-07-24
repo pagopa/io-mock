@@ -32,6 +32,8 @@ services:
     build:
       context: ./
       dockerfile: io-notification-hub-mock/Dockerfile
+      args:
+        - IO_NH_BRANCH
     env_file:
       - env.io-notification-hub
     ports:
@@ -55,6 +57,8 @@ services:
     build:
       context: ./
       dockerfile: io-functions-admin/Dockerfile
+      args:
+        - FUNCTIONS_ADMIN_BRANCH
     env_file:
       - generated-env/env.cosmosdb
       - generated-env/env.io-functions-admin
@@ -76,6 +80,8 @@ services:
     build:
       context: ./
       dockerfile: io-functions-app/Dockerfile
+      args:
+        - FUNCTIONS_APP_BRANCH
     env_file:
       - generated-env/env.cosmosdb
       - generated-env/env.io-functions-app
@@ -97,6 +103,8 @@ services:
     build:
       context: ./
       dockerfile: io-functions-public/Dockerfile
+      args:
+        - FUNCTIONS_SERVICES_BRANCH
     env_file:
       - generated-env/env.cosmosdb
       - generated-env/env.io-functions-public
@@ -115,6 +123,8 @@ services:
     build:
       context: ./
       dockerfile: io-functions-services/Dockerfile
+      args:
+        - FUNCTIONS_SERVICES_BRANCH
     env_file:
       - generated-env/env.cosmosdb
       - generated-env/env.io-functions-services

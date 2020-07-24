@@ -1,5 +1,7 @@
 FROM functions
 
+ARG FUNCTIONS_SERVICES_BRANCH
+
 RUN git clone https://github.com/pagopa/io-functions-services.git /usr/src/app && \
          git checkout $FUNCTIONS_SERVICES_BRANCH && \
          yarn install && \
