@@ -14,7 +14,7 @@
     "generate:env-fixtures": "dotenv -e .env envsub env.fixtures generated-env/env.fixtures",
     "generate:env-cosmosdb": "dotenv -e .env envsub env.cosmosdb generated-env/env.cosmosdb",
     "prestart": "npm-run-all generate",
-    "start": "docker-compose up --build -d",
+    "start": "docker-compose --env-file .env up --build -d",
     "stop": "docker-compose down"
   },
   "devDependencies": {
