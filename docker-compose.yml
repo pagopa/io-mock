@@ -1,7 +1,6 @@
 version: "3.2"
 
 services:
-
   cosmosdb:
     image: cosmosdb
     env_file:
@@ -15,13 +14,13 @@ services:
       - io-fn
 
   fixtures:
-    image: fixtures
+    image: io-fixtures
     env_file:
       - generated-env/env.cosmosdb
-      - generated-env/env.fixtures
+      - generated-env/env.io-fixtures
     build:
       context: ./
-      dockerfile: fixtures/Dockerfile
+      dockerfile: io-fixtures/Dockerfile
     depends_on:
       - cosmosdb
     networks:
@@ -42,7 +41,7 @@ services:
       - io-fn
     depends_on:
       - mailhog
-    volumes: 
+    volumes:
       - "./io-backend/certs:/usr/src/app/certs:cached"
 
   functions:
@@ -147,15 +146,15 @@ services:
       context: ./
       dockerfile: io-backend/Dockerfile
       args:
-       - GITHUB_TOKEN
-       - IO_BACKEND_BRANCH
+        - GITHUB_TOKEN
+        - IO_BACKEND_BRANCH
     env_file:
       - generated-env/env.io-backend
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.backend.rule=Host(`backend.localhost`)"
       - "traefik.http.routers.backend.entrypoints=web"
-    expose: 
+    expose:
       - "443"
     ports:
       - ${IO_BACKEND_PORT}:443
@@ -163,7 +162,7 @@ services:
     command: ["yarn", "hot-reload"]
     networks:
       - io-fn
-    volumes: 
+    volumes:
       - "./io-backend/certs:/usr/src/app/certs:cached"
 
   pagopa-proxy:
@@ -172,8 +171,8 @@ services:
       context: ./
       dockerfile: io-pagopa-proxy/Dockerfile
       args:
-       - GITHUB_TOKEN
-       - IO_PAGOPA_PROXY_BRANCH
+        - GITHUB_TOKEN
+        - IO_PAGOPA_PROXY_BRANCH
     env_file:
       - env.io-pagopa-proxy
     ports:
