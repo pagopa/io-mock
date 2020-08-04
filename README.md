@@ -36,8 +36,6 @@ Database and storage are shared among each application in the mock.
 | name | description |
 |-|-|-|
 | STORAGE_CONNECTION_STRING | Connection string for the Azure Storage used by this mock |
-| STORAGE_ACCOUNT_NAME | Account name for the Azure Storage used by this mock |
-| STORAGE_ACCOUNT_KEY | Account key for the Azure Storage used by this mock |
 | COSMOSDB_URI | Uri of the Azure Cosmosdb instance used by this mock |
 | COSMOSDB_KEY | Account Key for the Azure Cosmosdb instance used by this mock |
 | COSMOSDB_NAME | Name of the database used by this mock |
