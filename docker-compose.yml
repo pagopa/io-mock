@@ -68,11 +68,11 @@ services:
       - io-fn
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.functions-admin.rule=Host(`functions-admin.localhost`)"
+      - "traefik.http.routers.functions-admin.rule=Host(`functions-admin.localhost`) || PathPrefix(`/functions-admin`)"
       - "traefik.http.routers.functions-admin.entrypoints=web"
 
       # apply middleware to route
-      - "traefik.http.routers.functions-admin.middlewares=testHeader"
+      - "traefik.http.routers.functions-admin.middlewares=testHeader,fn-admin-stripprefix"
 
   functions-app:
     image: io-functions-app
@@ -254,6 +254,7 @@ services:
       - "traefik.http.middlewares.testHeader.headers.customrequestheaders.x-user-note=unused"
       - "traefik.http.middlewares.testHeader.headers.customrequestheaders.x-functions-key=unused"
       - "traefik.http.middlewares.fn-services-stripprefix.stripprefix.prefixes=/functions-services"
+      - "traefik.http.middlewares.fn-admin-stripprefix.stripprefix.prefixes=/functions-admin"
 
 networks:
   io-fn:
