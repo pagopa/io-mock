@@ -49,5 +49,6 @@ Database and storage are shared among each application in the mock.
 ## Execute
 ```sh
 yarn start # build and run all the containers defined in the docker-compose.yaml file
+yarn start -d # same but with detatched execution
 yarn stop # stops and destroy all the containers defined in the docker-compose.yaml file
 ```
