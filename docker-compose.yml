@@ -54,8 +54,8 @@ services:
   functions-admin:
     image: io-functions-admin
     build:
-      context: ./
-      dockerfile: io-functions-admin/Dockerfile
+      context: ${FUNCTIONS_ADMIN_CONTEXT}
+      dockerfile: ./Dockerfile
       args:
         - FUNCTIONS_ADMIN_BRANCH
     env_file:
@@ -77,8 +77,8 @@ services:
   functions-app:
     image: io-functions-app
     build:
-      context: ./
-      dockerfile: io-functions-app/Dockerfile
+      context: ${FUNCTIONS_APP_CONTEXT}
+      dockerfile: ./Dockerfile
       args:
         - FUNCTIONS_APP_BRANCH
     env_file:
@@ -100,8 +100,8 @@ services:
   functions-public:
     image: io-functions-public
     build:
-      context: ./
-      dockerfile: io-functions-public/Dockerfile
+      context: ${FUNCTIONS_PUBLIC_CONTEXT}
+      dockerfile: ./Dockerfile
       args:
         - FUNCTIONS_SERVICES_BRANCH
     env_file:
@@ -120,8 +120,8 @@ services:
   functions-services:
     image: io-functions-services
     build:
-      context: ./
-      dockerfile: io-functions-services/Dockerfile
+      context: ${FUNCTIONS_SERVICES_CONTEXT}
+      dockerfile: ./Dockerfile
       args:
         - FUNCTIONS_SERVICES_BRANCH
     env_file:
@@ -143,8 +143,8 @@ services:
   backend:
     image: io-backend
     build:
-      context: ./
-      dockerfile: io-backend/Dockerfile
+      context: ${IO_BACKEND_CONTEXT}
+      dockerfile: ./Dockerfile
       args:
         - GITHUB_TOKEN
         - IO_BACKEND_BRANCH
@@ -168,8 +168,8 @@ services:
   pagopa-proxy:
     image: io-pagopa-proxy
     build:
-      context: ./
-      dockerfile: io-pagopa-proxy/Dockerfile
+      context: ${IO_PAGOPA_PROXY_CONTEXT}
+      dockerfile: ./Dockerfile
       args:
         - GITHUB_TOKEN
         - IO_PAGOPA_PROXY_BRANCH
