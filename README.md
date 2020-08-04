@@ -23,7 +23,7 @@ Configuration is done by editing your local `.env` file
 Each app is configured with a triplet of environment variables:
 
 | name | description |
-|-|-|-|
+|-|-|
 | *APP-NAME*_CONTEXT | The build context location of the app. A `Dockerfile` is expected to be there. |
 | *APP-NAME*_BRANCH | The branch you want to build from. Used when the code is fetched from remote repo. |
 | *APP-NAME*_PORT | The port the app listens to. You don't usually need to edit this. |
@@ -34,7 +34,7 @@ By default each app is executed against the last version on the `master` branch 
 Database and storage are shared among each application in the mock.
 
 | name | description |
-|-|-|-|
+|-|-|
 | STORAGE_CONNECTION_STRING | Connection string for the Azure Storage used by this mock |
 | COSMOSDB_URI | Uri of the Azure Cosmosdb instance used by this mock |
 | COSMOSDB_KEY | Account Key for the Azure Cosmosdb instance used by this mock |
@@ -42,7 +42,7 @@ Database and storage are shared among each application in the mock.
 
 ### Private package registry
 | name | description |
-|-|-|-|
+|-|-|
 | GITHUB_TOKEN | Auth token to access our private Github registry. |
 
 
