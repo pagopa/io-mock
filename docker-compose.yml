@@ -134,11 +134,11 @@ services:
       - io-fn
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.functions-services.rule=Host(`functions-services.localhost`)"
+      - "traefik.http.routers.functions-services.rule=Host(`functions-services.localhost`) || PathPrefix(`/functions-services`)"
       - "traefik.http.routers.functions-services.entrypoints=web"
 
       # apply middleware to route
-      - "traefik.http.routers.functions-services.middlewares=testHeader"
+      - "traefik.http.routers.functions-services.middlewares=testHeader,fn-services-stripprefix"
   functions-bonus:
     image: io-functions-bonus
     build:
@@ -253,6 +253,7 @@ services:
       - "traefik.http.middlewares.testHeader.headers.customrequestheaders.x-user-email=unused@example.com"
       - "traefik.http.middlewares.testHeader.headers.customrequestheaders.x-user-note=unused"
       - "traefik.http.middlewares.testHeader.headers.customrequestheaders.x-functions-key=unused"
+      - "traefik.http.middlewares.fn-services-stripprefix.stripprefix.prefixes=/functions-services"
 
 networks:
   io-fn:
