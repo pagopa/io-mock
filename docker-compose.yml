@@ -29,8 +29,8 @@ services:
   notificationhub:
     image: notificationhub
     build:
-      context: ./
-      dockerfile: io-notification-hub-mock/Dockerfile
+      context: ${NOTIFICATION_HUB_CONTEXT}
+      dockerfile: ./Dockerfile
       args:
         - IO_NH_BRANCH
     env_file:
@@ -142,8 +142,8 @@ services:
   functions-bonus:
     image: io-functions-bonus
     build:
-      context: ./
-      dockerfile: io-functions-bonus/Dockerfile
+      context: ${FUNCTIONS_BONUS_CONTEXT}
+      dockerfile: ./Dockerfile
       args:
         - FUNCTIONS_BONUS_BRANCH
     env_file:
