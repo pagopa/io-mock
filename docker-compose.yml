@@ -43,6 +43,18 @@ services:
       - mailhog
     volumes:
       - "./io-backend/certs:/usr/src/app/certs:cached"
+  
+  io-bonus-inps-mock:
+    image: io-bonus-inps-mock
+    build:
+      context: ${IO_BONUS_INPS_MOCK_CONTEXT}
+      dockerfile: ./Dockerfile
+      args:
+        - IO_BONUS_INPS_MOCK_BRANCH
+    ports:
+      - "3003:3003"
+    networks:
+      - io-fn
 
   functions:
     image: functions
