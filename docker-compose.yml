@@ -29,8 +29,8 @@ services:
   notificationhub:
     image: notificationhub
     build:
-      context: ./
-      dockerfile: io-notification-hub-mock/Dockerfile
+      context: ${NOTIFICATION_HUB_CONTEXT}
+      dockerfile: ./Dockerfile
       args:
         - IO_NH_BRANCH
     env_file:
@@ -43,6 +43,18 @@ services:
       - mailhog
     volumes:
       - "./io-backend/certs:/usr/src/app/certs:cached"
+  
+  io-bonus-inps-mock:
+    image: io-bonus-inps-mock
+    build:
+      context: ${IO_BONUS_INPS_MOCK_CONTEXT}
+      dockerfile: ./Dockerfile
+      args:
+        - IO_BONUS_INPS_MOCK_BRANCH
+    ports:
+      - "3003:3003"
+    networks:
+      - io-fn
 
   functions:
     image: functions
@@ -68,11 +80,11 @@ services:
       - io-fn
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.functions-admin.rule=Host(`functions-admin.localhost`)"
+      - "traefik.http.routers.functions-admin.rule=Host(`functions-admin.localhost`) || PathPrefix(`/functions-admin`)"
       - "traefik.http.routers.functions-admin.entrypoints=web"
 
       # apply middleware to route
-      - "traefik.http.routers.functions-admin.middlewares=testHeader"
+      - "traefik.http.routers.functions-admin.middlewares=testHeader,fn-admin-stripprefix"
 
   functions-app:
     image: io-functions-app
@@ -134,11 +146,30 @@ services:
       - io-fn
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.functions-services.rule=Host(`functions-services.localhost`)"
+      - "traefik.http.routers.functions-services.rule=Host(`functions-services.localhost`) || PathPrefix(`/functions-services`)"
       - "traefik.http.routers.functions-services.entrypoints=web"
 
       # apply middleware to route
-      - "traefik.http.routers.functions-services.middlewares=testHeader"
+      - "traefik.http.routers.functions-services.middlewares=testHeader,fn-services-stripprefix"
+  functions-bonus:
+    image: io-functions-bonus
+    build:
+      context: ${FUNCTIONS_BONUS_CONTEXT}
+      dockerfile: ./Dockerfile
+      args:
+        - FUNCTIONS_BONUS_BRANCH
+    env_file:
+      - generated-env/env.cosmosdb
+      - generated-env/env.io-functions-bonus
+    working_dir: /usr/src/app
+    ports:
+      - ${FUNCTIONS_BONUS_PORT}:7071
+    networks:
+      - io-fn
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.functions-bonus.rule=Host(`functions-bonus.localhost`)"
+      - "traefik.http.routers.functions-bonus.entrypoints=web"
 
   backend:
     image: io-backend
@@ -234,6 +265,8 @@ services:
       - "traefik.http.middlewares.testHeader.headers.customrequestheaders.x-user-email=unused@example.com"
       - "traefik.http.middlewares.testHeader.headers.customrequestheaders.x-user-note=unused"
       - "traefik.http.middlewares.testHeader.headers.customrequestheaders.x-functions-key=unused"
+      - "traefik.http.middlewares.fn-services-stripprefix.stripprefix.prefixes=/functions-services"
+      - "traefik.http.middlewares.fn-admin-stripprefix.stripprefix.prefixes=/functions-admin"
 
 networks:
   io-fn:
