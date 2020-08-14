@@ -91,3 +91,25 @@ services:
     labels:
       - traefik.http.services.functions-admin.loadbalancer.server.port=7071
 ```
+
+To debug such a service add these lines into `.vscode/launch.json`
+
+```json
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "attach",
+      "name": "Docker: Attach to Node",
+      "protocol": "auto",
+      "port": 5861,
+      "restart": true,
+      "localRoot": "${workspaceFolder}",
+      "remoteRoot": "/usr/src/app",
+      "outFiles": ["${workspaceFolder}/dist/**/*.js"],
+      "skipFiles": ["<node_internals>/**/*.js"]
+    }
+  ]
+}
+```
