@@ -29,8 +29,8 @@ services:
   notificationhub:
     image: notificationhub
     build:
-      context: ./
-      dockerfile: io-notification-hub-mock/Dockerfile
+      context: ${NOTIFICATION_HUB_CONTEXT}
+      dockerfile: ./Dockerfile
       args:
         - IO_NH_BRANCH
     env_file:
@@ -43,6 +43,18 @@ services:
       - mailhog
     volumes:
       - "./io-backend/certs:/usr/src/app/certs:cached"
+  
+  io-bonus-inps-mock:
+    image: io-bonus-inps-mock
+    build:
+      context: ${IO_BONUS_INPS_MOCK_CONTEXT}
+      dockerfile: ./Dockerfile
+      args:
+        - IO_BONUS_INPS_MOCK_BRANCH
+    ports:
+      - "3003:3003"
+    networks:
+      - io-fn
 
   functions:
     image: functions
@@ -54,8 +66,8 @@ services:
   functions-admin:
     image: io-functions-admin
     build:
-      context: ./
-      dockerfile: io-functions-admin/Dockerfile
+      context: ${FUNCTIONS_ADMIN_CONTEXT}
+      dockerfile: ./Dockerfile
       args:
         - FUNCTIONS_ADMIN_BRANCH
     env_file:
@@ -68,17 +80,17 @@ services:
       - io-fn
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.functions-admin.rule=Host(`functions-admin.localhost`)"
+      - "traefik.http.routers.functions-admin.rule=Host(`functions-admin.localhost`) || PathPrefix(`/functions-admin`)"
       - "traefik.http.routers.functions-admin.entrypoints=web"
 
       # apply middleware to route
-      - "traefik.http.routers.functions-admin.middlewares=testHeader"
+      - "traefik.http.routers.functions-admin.middlewares=testHeader,fn-admin-stripprefix"
 
   functions-app:
     image: io-functions-app
     build:
-      context: ./
-      dockerfile: io-functions-app/Dockerfile
+      context: ${FUNCTIONS_APP_CONTEXT}
+      dockerfile: ./Dockerfile
       args:
         - FUNCTIONS_APP_BRANCH
     env_file:
@@ -100,8 +112,8 @@ services:
   functions-public:
     image: io-functions-public
     build:
-      context: ./
-      dockerfile: io-functions-public/Dockerfile
+      context: ${FUNCTIONS_PUBLIC_CONTEXT}
+      dockerfile: ./Dockerfile
       args:
         - FUNCTIONS_SERVICES_BRANCH
     env_file:
@@ -120,8 +132,8 @@ services:
   functions-services:
     image: io-functions-services
     build:
-      context: ./
-      dockerfile: io-functions-services/Dockerfile
+      context: ${FUNCTIONS_SERVICES_CONTEXT}
+      dockerfile: ./Dockerfile
       args:
         - FUNCTIONS_SERVICES_BRANCH
     env_file:
@@ -134,17 +146,36 @@ services:
       - io-fn
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.functions-services.rule=Host(`functions-services.localhost`)"
+      - "traefik.http.routers.functions-services.rule=Host(`functions-services.localhost`) || PathPrefix(`/functions-services`)"
       - "traefik.http.routers.functions-services.entrypoints=web"
 
       # apply middleware to route
-      - "traefik.http.routers.functions-services.middlewares=testHeader"
+      - "traefik.http.routers.functions-services.middlewares=testHeader,fn-services-stripprefix"
+  functions-bonus:
+    image: io-functions-bonus
+    build:
+      context: ${FUNCTIONS_BONUS_CONTEXT}
+      dockerfile: ./Dockerfile
+      args:
+        - FUNCTIONS_BONUS_BRANCH
+    env_file:
+      - generated-env/env.cosmosdb
+      - generated-env/env.io-functions-bonus
+    working_dir: /usr/src/app
+    ports:
+      - ${FUNCTIONS_BONUS_PORT}:7071
+    networks:
+      - io-fn
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.functions-bonus.rule=Host(`functions-bonus.localhost`)"
+      - "traefik.http.routers.functions-bonus.entrypoints=web"
 
   backend:
     image: io-backend
     build:
-      context: ./
-      dockerfile: io-backend/Dockerfile
+      context: ${IO_BACKEND_CONTEXT}
+      dockerfile: ./Dockerfile
       args:
         - GITHUB_TOKEN
         - IO_BACKEND_BRANCH
@@ -168,8 +199,8 @@ services:
   pagopa-proxy:
     image: io-pagopa-proxy
     build:
-      context: ./
-      dockerfile: io-pagopa-proxy/Dockerfile
+      context: ${IO_PAGOPA_PROXY_CONTEXT}
+      dockerfile: ./Dockerfile
       args:
         - GITHUB_TOKEN
         - IO_PAGOPA_PROXY_BRANCH
@@ -234,6 +265,8 @@ services:
       - "traefik.http.middlewares.testHeader.headers.customrequestheaders.x-user-email=unused@example.com"
       - "traefik.http.middlewares.testHeader.headers.customrequestheaders.x-user-note=unused"
       - "traefik.http.middlewares.testHeader.headers.customrequestheaders.x-functions-key=unused"
+      - "traefik.http.middlewares.fn-services-stripprefix.stripprefix.prefixes=/functions-services"
+      - "traefik.http.middlewares.fn-admin-stripprefix.stripprefix.prefixes=/functions-admin"
 
 networks:
   io-fn:
