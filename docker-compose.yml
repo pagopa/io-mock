@@ -23,8 +23,11 @@ services:
       dockerfile: io-fixtures/Dockerfile
     depends_on:
       - cosmosdb
+    ports: []
     networks:
       - io-fn
+    labels:
+      - "traefik.enable=false"
 
   notificationhub:
     image: notificationhub
@@ -43,7 +46,7 @@ services:
       - mailhog
     volumes:
       - "./io-backend/certs:/usr/src/app/certs:cached"
-  
+
   io-bonus-inps-mock:
     image: io-bonus-inps-mock
     build:
@@ -151,6 +154,7 @@ services:
 
       # apply middleware to route
       - "traefik.http.routers.functions-services.middlewares=testHeader,fn-services-stripprefix"
+
   functions-bonus:
     image: io-functions-bonus
     build:
