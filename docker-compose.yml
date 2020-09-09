@@ -81,6 +81,8 @@ services:
       - ${FUNCTIONS_ADMIN_PORT}:7071
     networks:
       - io-fn
+    depends_on:
+      - functions
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.functions-admin.rule=Host(`functions-admin.localhost`) || PathPrefix(`/functions-admin`)"
@@ -105,6 +107,7 @@ services:
     networks:
       - io-fn
     depends_on:
+      - functions
       - notificationhub
       - fixtures
     labels:
@@ -127,6 +130,8 @@ services:
       - ${FUNCTIONS_PUBLIC_PORT}:7071
     networks:
       - io-fn
+    depends_on:
+      - functions
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.functions-public.rule=Host(`functions-public.localhost`)"
@@ -147,6 +152,8 @@ services:
       - ${FUNCTIONS_SERVICES_PORT}:7071
     networks:
       - io-fn
+    depends_on:
+      - functions
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.functions-services.rule=Host(`functions-services.localhost`) || PathPrefix(`/functions-services`)"
@@ -170,6 +177,8 @@ services:
       - ${FUNCTIONS_BONUS_PORT}:7071
     networks:
       - io-fn
+    depends_on:
+      - functions
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.functions-bonus.rule=Host(`functions-bonus.localhost`)"
