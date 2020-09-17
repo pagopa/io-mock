@@ -81,6 +81,9 @@ services:
       context: base/functions
     volumes:
       - "../io-functions-admin:/usr/src/app"
+      # use
+      # - "../io-functions-admin:/usr/src/app:delegated"
+      # if you're on Mac to avoid CPU exhaustion
     ports:
       - ${FUNCTIONS_ADMIN_PORT}:7071
       # node inspector
