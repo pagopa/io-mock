@@ -46,6 +46,8 @@ services:
       - mailhog
     volumes:
       - "./io-backend/certs:/usr/src/app/certs:cached"
+      - "./io-notification-hub-mock/scripts:/usr/src/app/docker-scripts:cached"
+    command: ["sh", "docker-scripts/sync-and-start.sh"]
 
   io-bonus-inps-mock:
     image: io-bonus-inps-mock
@@ -58,6 +60,9 @@ services:
       - "3003:3003"
     networks:
       - io-fn
+    command: ["sh", "docker-scripts/sync-and-start.sh"]
+    volumes:
+      - "./io-bonus-inps-node-mock/scripts:/usr/src/app/docker-scripts:cached"
 
   functions:
     image: functions
@@ -90,6 +95,9 @@ services:
 
       # apply middleware to route
       - "traefik.http.routers.functions-admin.middlewares=testHeader,fn-admin-stripprefix"
+    command: ["sh", "docker-scripts/sync-and-start.sh"]
+    volumes:
+      - "./functions/scripts:/usr/src/app/docker-scripts:cached"
 
   functions-app:
     image: io-functions-app
@@ -114,6 +122,9 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.functions-app.rule=Host(`functions-app.localhost`)"
       - "traefik.http.routers.functions-app.entrypoints=web"
+    command: ["sh", "docker-scripts/sync-and-start.sh"]
+    volumes:
+      - "./functions/scripts:/usr/src/app/docker-scripts:cached"
 
   functions-public:
     image: io-functions-public
@@ -136,6 +147,9 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.functions-public.rule=Host(`functions-public.localhost`)"
       - "traefik.http.routers.functions-public.entrypoints=web"
+    command: ["sh", "docker-scripts/sync-and-start.sh"]
+    volumes:
+      - "./functions/scripts:/usr/src/app/docker-scripts:cached"
 
   functions-services:
     image: io-functions-services
@@ -161,6 +175,9 @@ services:
 
       # apply middleware to route
       - "traefik.http.routers.functions-services.middlewares=testHeader,fn-services-stripprefix"
+    command: ["sh", "docker-scripts/sync-and-start.sh"]
+    volumes:
+      - "./functions/scripts:/usr/src/app/docker-scripts:cached"
 
   functions-bonus:
     image: io-functions-bonus
@@ -183,6 +200,9 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.functions-bonus.rule=Host(`functions-bonus.localhost`)"
       - "traefik.http.routers.functions-bonus.entrypoints=web"
+    command: ["sh", "docker-scripts/sync-and-start.sh"]
+    volumes:
+      - "./functions/scripts:/usr/src/app/docker-scripts:cached"
 
   backend:
     image: io-backend
@@ -203,11 +223,12 @@ services:
     ports:
       - ${IO_BACKEND_PORT}:443
       - "5859:5859"
-    command: ["yarn", "hot-reload"]
+    command: ["sh", "docker-scripts/sync-and-start.sh"]
     networks:
       - io-fn
     volumes:
       - "./io-backend/certs:/usr/src/app/certs:cached"
+      - "./io-backend/scripts:/usr/src/app/docker-scripts:cached"
 
   pagopa-proxy:
     image: io-pagopa-proxy
@@ -226,6 +247,9 @@ services:
       - io-fn
     depends_on:
       - redis
+    volumes:
+      - "./io-pagopa-proxy/scripts:/usr/src/app/docker-scripts:cached"
+    command: ["sh", "docker-scripts/sync-and-start.sh"]
 
   redis:
     container_name: redis
