@@ -5,7 +5,7 @@ RUN apk update && apk upgrade && \
 
 WORKDIR /usr/src/app
 
-ARG IO_BONUS_INPS_MOCK_BRANCH
+ARG COMMIT_SHA
 
 RUN rm -rf * && \
     git clone https://github.com/pagopa/io-bonus-inps-node-mock.git /usr/src/app && \

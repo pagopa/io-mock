@@ -1,6 +1,6 @@
 FROM functions
 
-ARG FUNCTIONS_APP_BRANCH
+ARG COMMIT_SHA
 
 RUN git clone https://github.com/pagopa/io-functions-app.git /usr/src/app && \
          git checkout $COMMIT_SHA && \
