@@ -36,8 +36,9 @@ services:
       dockerfile: ./Dockerfile
       args:
         - IO_NH_BRANCH
+        - COMMIT_SHA
     env_file:
-      - env.io-notification-hub
+      - generated-env/env.io-notification-hub
     ports:
       - "30000:30000"
     networks:
@@ -46,8 +47,6 @@ services:
       - mailhog
     volumes:
       - "./io-backend/certs:/usr/src/app/certs:cached"
-      - "./io-notification-hub-mock/scripts:/usr/src/app/docker-scripts:cached"
-    command: ["sh", "docker-scripts/sync-and-start.sh"]
 
   io-bonus-inps-mock:
     image: io-bonus-inps-mock
@@ -55,14 +54,11 @@ services:
       context: ${IO_BONUS_INPS_MOCK_CONTEXT}
       dockerfile: ./Dockerfile
       args:
-        - IO_BONUS_INPS_MOCK_BRANCH
+        - COMMIT_SHA
     ports:
       - "3003:3003"
     networks:
       - io-fn
-    command: ["sh", "docker-scripts/sync-and-start.sh"]
-    volumes:
-      - "./io-bonus-inps-node-mock/scripts:/usr/src/app/docker-scripts:cached"
 
   functions:
     image: functions
@@ -77,7 +73,7 @@ services:
       context: ${FUNCTIONS_ADMIN_CONTEXT}
       dockerfile: ./Dockerfile
       args:
-        - FUNCTIONS_ADMIN_BRANCH
+        - COMMIT_SHA
     env_file:
       - generated-env/env.cosmosdb
       - generated-env/env.io-functions-admin
@@ -95,9 +91,6 @@ services:
 
       # apply middleware to route
       - "traefik.http.routers.functions-admin.middlewares=testHeader,fn-admin-stripprefix"
-    command: ["sh", "docker-scripts/sync-and-start.sh"]
-    volumes:
-      - "./functions/scripts:/usr/src/app/docker-scripts:cached"
 
   functions-app:
     image: io-functions-app
@@ -105,7 +98,7 @@ services:
       context: ${FUNCTIONS_APP_CONTEXT}
       dockerfile: ./Dockerfile
       args:
-        - FUNCTIONS_APP_BRANCH
+        - COMMIT_SHA
     env_file:
       - generated-env/env.cosmosdb
       - generated-env/env.io-functions-app
@@ -122,9 +115,6 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.functions-app.rule=Host(`functions-app.localhost`)"
       - "traefik.http.routers.functions-app.entrypoints=web"
-    command: ["sh", "docker-scripts/sync-and-start.sh"]
-    volumes:
-      - "./functions/scripts:/usr/src/app/docker-scripts:cached"
 
   functions-public:
     image: io-functions-public
@@ -132,7 +122,7 @@ services:
       context: ${FUNCTIONS_PUBLIC_CONTEXT}
       dockerfile: ./Dockerfile
       args:
-        - FUNCTIONS_SERVICES_BRANCH
+        - COMMIT_SHA
     env_file:
       - generated-env/env.cosmosdb
       - generated-env/env.io-functions-public
@@ -147,9 +137,6 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.functions-public.rule=Host(`functions-public.localhost`)"
       - "traefik.http.routers.functions-public.entrypoints=web"
-    command: ["sh", "docker-scripts/sync-and-start.sh"]
-    volumes:
-      - "./functions/scripts:/usr/src/app/docker-scripts:cached"
 
   functions-services:
     image: io-functions-services
@@ -157,7 +144,7 @@ services:
       context: ${FUNCTIONS_SERVICES_CONTEXT}
       dockerfile: ./Dockerfile
       args:
-        - FUNCTIONS_SERVICES_BRANCH
+        - COMMIT_SHA
     env_file:
       - generated-env/env.cosmosdb
       - generated-env/env.io-functions-services
@@ -175,9 +162,6 @@ services:
 
       # apply middleware to route
       - "traefik.http.routers.functions-services.middlewares=testHeader,fn-services-stripprefix"
-    command: ["sh", "docker-scripts/sync-and-start.sh"]
-    volumes:
-      - "./functions/scripts:/usr/src/app/docker-scripts:cached"
 
   functions-bonus:
     image: io-functions-bonus
@@ -185,7 +169,7 @@ services:
       context: ${FUNCTIONS_BONUS_CONTEXT}
       dockerfile: ./Dockerfile
       args:
-        - FUNCTIONS_BONUS_BRANCH
+        - COMMIT_SHA
     env_file:
       - generated-env/env.cosmosdb
       - generated-env/env.io-functions-bonus
@@ -200,9 +184,6 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.functions-bonus.rule=Host(`functions-bonus.localhost`)"
       - "traefik.http.routers.functions-bonus.entrypoints=web"
-    command: ["sh", "docker-scripts/sync-and-start.sh"]
-    volumes:
-      - "./functions/scripts:/usr/src/app/docker-scripts:cached"
 
   backend:
     image: io-backend
@@ -211,7 +192,7 @@ services:
       dockerfile: ./Dockerfile
       args:
         - GITHUB_TOKEN
-        - IO_BACKEND_BRANCH
+        - COMMIT_SHA
     env_file:
       - generated-env/env.io-backend
     labels:
@@ -223,12 +204,11 @@ services:
     ports:
       - ${IO_BACKEND_PORT}:443
       - "5859:5859"
-    command: ["sh", "docker-scripts/sync-and-start.sh"]
+    command: ["yarn", "hot-reload"]
     networks:
       - io-fn
     volumes:
       - "./io-backend/certs:/usr/src/app/certs:cached"
-      - "./io-backend/scripts:/usr/src/app/docker-scripts:cached"
 
   pagopa-proxy:
     image: io-pagopa-proxy
@@ -237,9 +217,9 @@ services:
       dockerfile: ./Dockerfile
       args:
         - GITHUB_TOKEN
-        - IO_PAGOPA_PROXY_BRANCH
+        - COMMIT_SHA
     env_file:
-      - env.io-pagopa-proxy
+      - generated-env/env.io-pagopa-proxy
     ports:
       - ${PAGOPAPROXY_PORT}:3001
       - ${PAGOPA_PORT}:3002
@@ -247,9 +227,6 @@ services:
       - io-fn
     depends_on:
       - redis
-    volumes:
-      - "./io-pagopa-proxy/scripts:/usr/src/app/docker-scripts:cached"
-    command: ["sh", "docker-scripts/sync-and-start.sh"]
 
   redis:
     container_name: redis

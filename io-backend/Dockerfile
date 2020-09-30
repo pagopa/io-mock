@@ -5,13 +5,13 @@ RUN apk update && apk upgrade && \
 
 WORKDIR /usr/src/app
 
-ARG IO_BACKEND_BRANCH
+ARG COMMIT_SHA
 ARG GITHUB_TOKEN
 ENV GITHUB_TOKEN=${GITHUB_TOKEN}
 
 RUN rm -rf * && \
     git clone https://github.com/pagopa/io-backend.git /usr/src/app && \
-    git checkout ${IO_BACKEND_BRANCH}
+    git checkout $COMMIT_SHA
 
 RUN ./scripts/init-npm.sh
 

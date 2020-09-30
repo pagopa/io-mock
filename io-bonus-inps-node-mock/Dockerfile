@@ -9,7 +9,7 @@ ARG IO_BONUS_INPS_MOCK_BRANCH
 
 RUN rm -rf * && \
     git clone https://github.com/pagopa/io-bonus-inps-node-mock.git /usr/src/app && \
-    git checkout ${IO_BONUS_INPS_MOCK_BRANCH}
+    git checkout $COMMIT_SHA
 
 RUN yarn install && \
   yarn build

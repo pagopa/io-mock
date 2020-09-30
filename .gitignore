@@ -1,5 +1,6 @@
 
 /.idea/
+yarn-error.log
 .env
 generated-env
 node_modules

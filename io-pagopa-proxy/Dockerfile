@@ -13,7 +13,7 @@ ENV GITHUB_TOKEN=${GITHUB_TOKEN}
 
 RUN rm -rf * && \
     git clone https://github.com/pagopa/io-pagopa-proxy.git /usr/src/app && \
-    git checkout ${IO_PAGOPA_PROXY_BRANCH}
+    git checkout $COMMIT_SHA
 
 RUN yarn install && \
     yarn build

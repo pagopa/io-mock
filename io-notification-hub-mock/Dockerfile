@@ -9,7 +9,7 @@ ARG IO_NH_BRANCH
 
 RUN rm -rf * && \
     git clone https://github.com/pagopa/io-notification-hub-mock.git /usr/src/app && \
-    git checkout ${IO_NH_BRANCH}
+    git checkout $COMMIT_SHA
 
 RUN yarn install && \
     yarn build
