@@ -22,12 +22,6 @@ cp env.example .env
 
 then change values into `.env` based on your needs. **Such file must never be committed**
 
-### Install software dependencies
-
-For the execution of the project some software must be installed on your machine.
-
-*jq* is required and could be installed with the command `brew install jq` on Mac machines.
-
 ## Configure execution
 
 Configuration is done by editing your local `.env` file
