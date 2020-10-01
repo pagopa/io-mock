@@ -14,7 +14,7 @@
     "generate:env-backend": "node bin/index.js IO_BACKEND_REPO IO_BACKEND_BRANCH env.io-backend generated-env/env.io-backend",
     "generate:env-notification-hub": "node bin/index.js NOTIFICATION_HUB_REPO IO_NH_BRANCH env.io-notification-hub generated-env/env.io-notification-hub",
     "generate:env-pagopa-proxy": "node bin/index.js IO_PAGOPA_PROXY_REPO IO_PAGOPA_PROXY_BRANCH env.io-pagopa-proxy generated-env/env.io-pagopa-proxy",
-    "generate:env-fixtures": "dotenv -e .env envsub env.io-fixtures generated-env/env.io-fixtures",
+    "generate:env-fixtures": "node bin/index.js IO_FIXTURES_REPO IO_FIXTURES_BRANCH env.io-fixtures generated-env/env.io-fixtures",
     "generate:env-cosmosdb": "dotenv -e .env envsub env.cosmosdb generated-env/env.cosmosdb",
     "prestart": "npm-run-all generate",
     "start": "docker-compose --env-file .env up --build",

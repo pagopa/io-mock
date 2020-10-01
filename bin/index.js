@@ -5,7 +5,8 @@ dotenv.config();
 
 const [_, __, repoUrlEnv, repoBranchEnv, templatePath, destinationPath] = process.argv;
 (async () => {
-  const commitSha = await fetch(`${process.env[repoUrlEnv]}${process.env[repoBranchEnv]}`)
+  const headers = { "Authorization": `token ${process.env["GITHUB_TOKEN"]}`};
+  const commitSha = await fetch(`${process.env[repoUrlEnv]}${process.env[repoBranchEnv]}`, {headers})
     .then(res => res.json())
     .then(json => json.object.sha);
  

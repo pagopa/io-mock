@@ -19,8 +19,10 @@ services:
       - generated-env/env.cosmosdb
       - generated-env/env.io-fixtures
     build:
-      context: ./
-      dockerfile: io-fixtures/Dockerfile
+      context: ${IO_FIXTURES_CONTEXT}
+      dockerfile: ./Dockerfile
+      args:
+        - COMMIT_SHA
     depends_on:
       - cosmosdb
     ports: []

@@ -5,11 +5,11 @@ RUN apk update && apk upgrade && \
 
 WORKDIR /usr/src/app
 
-ARG IO_FIXTURES_BRANCH
+ARG COMMIT_SHA
 
 RUN rm -rf * && \
     git clone https://github.com/pagopa/io-fixtures.git /usr/src/app && \
-    git checkout ${IO_FIXTURES_BRANCH}
+    git checkout $COMMIT_SHA
 
 RUN yarn install
 
