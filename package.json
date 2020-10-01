@@ -6,21 +6,25 @@
   "scripts": {
     "clean": "shx rm -rf generated-env && shx mkdir generated-env",
     "generate": "npm-run-all clean generate:*",
-    "generate:env-functions-app": "dotenv -e .env envsub env.io-functions-app generated-env/env.io-functions-app",
-    "generate:env-functions-public": "dotenv -e .env envsub env.io-functions-public generated-env/env.io-functions-public",
-    "generate:env-functions-admin": "dotenv -e .env envsub env.io-functions-admin generated-env/env.io-functions-admin",
-    "generate:env-functions-services": "dotenv -e .env envsub env.io-functions-services generated-env/env.io-functions-services",
-    "generate:env-functions-bonus": "dotenv -e .env envsub env.io-functions-bonus generated-env/env.io-functions-bonus",
-    "generate:env-backend": "dotenv -e .env envsub env.io-backend generated-env/env.io-backend",
-    "generate:env-fixtures": "dotenv -e .env envsub env.io-fixtures generated-env/env.io-fixtures",
+    "generate:env-functions-app": "node bin/index.js FUNCTIONS_APP_REPO FUNCTIONS_APP_BRANCH env.io-functions-app generated-env/env.io-functions-app",
+    "generate:env-functions-public": "node bin/index.js FUNCTIONS_PUBLIC_REPO FUNCTIONS_PUBLIC_BRANCH env.io-functions-public generated-env/env.io-functions-public",
+    "generate:env-functions-admin": "node bin/index.js FUNCTIONS_ADMIN_REPO FUNCTIONS_ADMIN_BRANCH env.io-functions-admin generated-env/env.io-functions-admin",
+    "generate:env-functions-services": "node bin/index.js FUNCTIONS_SERVICES_REPO FUNCTIONS_SERVICES_BRANCH env.io-functions-services generated-env/env.io-functions-services",
+    "generate:env-functions-bonus": "node bin/index.js FUNCTIONS_BONUS_REPO FUNCTIONS_BONUS_BRANCH env.io-functions-bonus generated-env/env.io-functions-bonus",
+    "generate:env-backend": "node bin/index.js IO_BACKEND_REPO IO_BACKEND_BRANCH env.io-backend generated-env/env.io-backend",
+    "generate:env-notification-hub": "node bin/index.js NOTIFICATION_HUB_REPO IO_NH_BRANCH env.io-notification-hub generated-env/env.io-notification-hub",
+    "generate:env-pagopa-proxy": "node bin/index.js IO_PAGOPA_PROXY_REPO IO_PAGOPA_PROXY_BRANCH env.io-pagopa-proxy generated-env/env.io-pagopa-proxy",
+    "generate:env-fixtures": "node bin/index.js IO_FIXTURES_REPO IO_FIXTURES_BRANCH env.io-fixtures generated-env/env.io-fixtures",
     "generate:env-cosmosdb": "dotenv -e .env envsub env.cosmosdb generated-env/env.cosmosdb",
     "prestart": "npm-run-all generate",
     "start": "docker-compose --env-file .env up --build",
     "stop": "docker-compose down"
   },
   "devDependencies": {
+    "dotenv": "^8.2.0",
     "dotenv-cli": "^3.2.0",
     "envsub": "^4.0.7",
+    "node-fetch": "^2.6.1",
     "npm-run-all": "^4.1.5",
     "shx": "^0.3.2"
   }

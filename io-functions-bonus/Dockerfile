@@ -1,9 +1,9 @@
 FROM functions
 
-ARG FUNCTIONS_BONUS_BRANCH
+ARG COMMIT_SHA
 
 RUN git clone https://github.com/pagopa/io-functions-bonus.git /usr/src/app && \
-         git checkout $FUNCTIONS_BONUS_BRANCH && \
+         git checkout $COMMIT_SHA && \
          yarn install && \
          yarn build && \
          func extensions install
