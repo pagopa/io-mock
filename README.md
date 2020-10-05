@@ -93,6 +93,15 @@ services:
       - languageWorkers__node__arguments="--inspect=0.0.0.0:5861"
     labels:
       - traefik.http.services.functions-admin.loadbalancer.server.port=7071
+
+  # or, for io-backend:
+
+  backend:
+    build:
+      context: base/node
+    volumes:
+      - "../io-backend:/usr/src/app:cached"
+    working_dir: /usr/src/app
 ```
 
 To debug such a service add these lines into `.vscode/launch.json`
@@ -116,3 +125,5 @@ To debug such a service add these lines into `.vscode/launch.json`
   ]
 }
 ```
+
+Ensure that the VSCode debugger port (`5861` in the example above) match the one exposed by docker.
