@@ -1,9 +1,9 @@
 FROM functions
 
-ARG COMMIT_SHA
+ARG FUNCTIONS_APP_COMMIT_SHA
 
 RUN git clone https://github.com/pagopa/io-functions-app.git /usr/src/app && \
-         git checkout $COMMIT_SHA && \
+         git checkout $FUNCTIONS_APP_COMMIT_SHA && \
          yarn install && \
          yarn build && \
          func extensions install

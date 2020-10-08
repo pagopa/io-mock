@@ -5,11 +5,11 @@ RUN apk update && apk upgrade && \
 
 WORKDIR /usr/src/app
 
-ARG COMMIT_SHA
+ARG IO_BONUS_INPS_MOCK_COMMIT_SHA
 
 RUN rm -rf * && \
     git clone https://github.com/pagopa/io-bonus-inps-node-mock.git /usr/src/app && \
-    git checkout $COMMIT_SHA
+    git checkout $IO_BONUS_INPS_MOCK_COMMIT_SHA
 
 RUN yarn install && \
   yarn build
