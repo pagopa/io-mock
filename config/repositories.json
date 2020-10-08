@@ -1,0 +1,52 @@
+[
+  {
+    "GITHUB_REPO": "https://api.github.com/repos/pagopa/io-functions-admin/git/ref/heads/",
+    "BRANCH": "master",
+    "ENV_COMMIT_SHA": "FUNCTIONS_ADMIN_COMMIT_SHA"
+  },
+  {
+    "GITHUB_REPO": "https://api.github.com/repos/pagopa/io-functions-app/git/ref/heads/",
+    "BRANCH": "master",
+    "ENV_COMMIT_SHA": "FUNCTIONS_APP_COMMIT_SHA"
+  },
+  {
+    "GITHUB_REPO": "https://api.github.com/repos/pagopa/io-functions-public/git/ref/heads/",
+    "BRANCH": "master",
+    "ENV_COMMIT_SHA": "FUNCTIONS_PUBLIC_COMMIT_SHA"
+  },
+  {
+    "GITHUB_REPO": "https://api.github.com/repos/pagopa/io-functions-services/git/ref/heads/",
+    "BRANCH": "master",
+    "ENV_COMMIT_SHA": "FUNCTIONS_SERVICES_COMMIT_SHA"
+  },
+  {
+    "GITHUB_REPO": "https://api.github.com/repos/pagopa/io-backend/git/ref/heads/",
+    "BRANCH": "master",
+    "ENV_COMMIT_SHA": "IO_BACKEND_COMMIT_SHA"
+  },
+  {
+    "GITHUB_REPO": "https://api.github.com/repos/pagopa/io-functions-bonus/git/ref/heads/",
+    "BRANCH": "master",
+    "ENV_COMMIT_SHA": "FUNCTIONS_BONUS_COMMIT_SHA"
+  },
+  {
+    "GITHUB_REPO": "https://api.github.com/repos/pagopa/io-pagopa-proxy/git/ref/heads/",
+    "BRANCH": "master",
+    "ENV_COMMIT_SHA": "IO_PAGOPA_PROXY_COMMIT_SHA"
+  },
+  {
+    "GITHUB_REPO": "https://api.github.com/repos/pagopa/io-notification-hub-mock/git/ref/heads/",
+    "BRANCH": "master",
+    "ENV_COMMIT_SHA": "NOTIFICATION_HUB_COMMIT_SHA"
+  },
+  {
+    "GITHUB_REPO": "https://api.github.com/repos/pagopa/io-bonus-inps-node-mock/git/ref/heads/",
+    "BRANCH": "master",
+    "ENV_COMMIT_SHA": "IO_BONUS_INPS_MOCK_COMMIT_SHA"
+  },
+  {
+    "GITHUB_REPO": "https://api.github.com/repos/pagopa/io-fixtures/git/ref/heads/",
+    "BRANCH": "master",
+    "ENV_COMMIT_SHA": "IO_FIXTURES_COMMIT_SHA"
+  }
+]

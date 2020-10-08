@@ -22,7 +22,7 @@ services:
       context: ${IO_FIXTURES_CONTEXT}
       dockerfile: ./Dockerfile
       args:
-        - COMMIT_SHA
+        - IO_FIXTURES_COMMIT_SHA
     depends_on:
       - cosmosdb
     ports: []
@@ -38,7 +38,7 @@ services:
       dockerfile: ./Dockerfile
       args:
         - IO_NH_BRANCH
-        - COMMIT_SHA
+        - NOTIFICATION_HUB_COMMIT_SHA
     env_file:
       - generated-env/env.io-notification-hub
     ports:
@@ -56,7 +56,7 @@ services:
       context: ${IO_BONUS_INPS_MOCK_CONTEXT}
       dockerfile: ./Dockerfile
       args:
-        - COMMIT_SHA
+        - IO_BONUS_INPS_MOCK_COMMIT_SHA
     ports:
       - "3003:3003"
     networks:
@@ -75,7 +75,7 @@ services:
       context: ${FUNCTIONS_ADMIN_CONTEXT}
       dockerfile: ./Dockerfile
       args:
-        - COMMIT_SHA
+        - FUNCTIONS_ADMIN_COMMIT_SHA
     env_file:
       - generated-env/env.cosmosdb
       - generated-env/env.io-functions-admin
@@ -100,7 +100,7 @@ services:
       context: ${FUNCTIONS_APP_CONTEXT}
       dockerfile: ./Dockerfile
       args:
-        - COMMIT_SHA
+        - FUNCTIONS_APP_COMMIT_SHA
     env_file:
       - generated-env/env.cosmosdb
       - generated-env/env.io-functions-app
@@ -124,7 +124,7 @@ services:
       context: ${FUNCTIONS_PUBLIC_CONTEXT}
       dockerfile: ./Dockerfile
       args:
-        - COMMIT_SHA
+        - FUNCTIONS_PUBLIC_COMMIT_SHA
     env_file:
       - generated-env/env.cosmosdb
       - generated-env/env.io-functions-public
@@ -146,7 +146,7 @@ services:
       context: ${FUNCTIONS_SERVICES_CONTEXT}
       dockerfile: ./Dockerfile
       args:
-        - COMMIT_SHA
+        - FUNCTIONS_SERVICES_COMMIT_SHA
     env_file:
       - generated-env/env.cosmosdb
       - generated-env/env.io-functions-services
@@ -171,7 +171,7 @@ services:
       context: ${FUNCTIONS_BONUS_CONTEXT}
       dockerfile: ./Dockerfile
       args:
-        - COMMIT_SHA
+        - FUNCTIONS_BONUS_COMMIT_SHA
     env_file:
       - generated-env/env.cosmosdb
       - generated-env/env.io-functions-bonus
@@ -194,7 +194,7 @@ services:
       dockerfile: ./Dockerfile
       args:
         - GITHUB_TOKEN
-        - COMMIT_SHA
+        - IO_BACKEND_COMMIT_SHA
     env_file:
       - generated-env/env.io-backend
     labels:
@@ -219,7 +219,7 @@ services:
       dockerfile: ./Dockerfile
       args:
         - GITHUB_TOKEN
-        - COMMIT_SHA
+        - IO_PAGOPA_PROXY_COMMIT_SHA
     env_file:
       - generated-env/env.io-pagopa-proxy
     ports:
