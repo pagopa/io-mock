@@ -224,11 +224,27 @@ services:
       - generated-env/env.io-pagopa-proxy
     ports:
       - ${PAGOPAPROXY_PORT}:3001
-      - ${PAGOPA_PORT}:3002
     networks:
       - io-fn
     depends_on:
       - redis
+
+  pagopa-nodo-mock:
+    image: io-pagopa-nodo-mock
+    build:
+      context: ${IO_PAGOPA_NODO_MOCK_CONTEXT}
+      dockerfile: ./Dockerfile
+      args:
+        - GITHUB_TOKEN
+        - IO_PAGOPA_NODO_MOCK_COMMIT_SHA
+    env_file:
+      - generated-env/env.io-pagopa-nodo-mock
+    ports:
+      - ${PAGOPA_PORT}:3002
+    networks:
+      - io-fn
+    depends_on:
+      - pagopa-proxy
 
   redis:
     container_name: redis

@@ -35,6 +35,11 @@
     "ENV_COMMIT_SHA": "IO_PAGOPA_PROXY_COMMIT_SHA"
   },
   {
+    "GITHUB_REPO": "https://api.github.com/repos/pagopa/io-pagopa-node-mock/git/ref/heads/",
+    "BRANCH": "master",
+    "ENV_COMMIT_SHA": "IO_PAGOPA_NODO_MOCK_COMMIT_SHA"
+  },
+  {
     "GITHUB_REPO": "https://api.github.com/repos/pagopa/io-notification-hub-mock/git/ref/heads/",
     "BRANCH": "master",
     "ENV_COMMIT_SHA": "NOTIFICATION_HUB_COMMIT_SHA"
