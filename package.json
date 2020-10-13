@@ -15,6 +15,7 @@
     "generate:env-backend": "dotenv -e generated-env/.env envsub env.io-backend generated-env/env.io-backend",
     "generate:env-notification-hub": "dotenv -e generated-env/.env envsub env.io-notification-hub generated-env/env.io-notification-hub",
     "generate:env-pagopa-proxy": "dotenv -e generated-env/.env envsub env.io-pagopa-proxy generated-env/env.io-pagopa-proxy",
+    "generate:env-pagopa-nodo-mock": "dotenv -e generated-env/.env envsub env.io-pagopa-nodo-mock generated-env/env.io-pagopa-nodo-mock",
     "generate:env-fixtures": "dotenv -e generated-env/.env envsub env.io-fixtures generated-env/env.io-fixtures",
     "generate:env-cosmosdb": "dotenv -e generated-env/.env envsub env.cosmosdb generated-env/env.cosmosdb",
     "prestart": "npm-run-all generate",
