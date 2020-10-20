@@ -1,4 +1,4 @@
-FROM node:10.14.2-alpine
+FROM functions
 
 RUN apk update && apk upgrade && \
     apk add --no-cache bash ca-certificates git openssh openssl
@@ -19,6 +19,4 @@ RUN yarn install && \
     yarn generate:proxy-models && \
     yarn build
 
-EXPOSE 443
-
-CMD ["node", "src/server.js"]
+CMD ["func", "start", "--javascript"]
