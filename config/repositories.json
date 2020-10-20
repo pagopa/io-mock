@@ -21,7 +21,7 @@
   },
   {
     "GITHUB_REPO": "https://api.github.com/repos/pagopa/io-backend/git/ref/heads/",
-    "BRANCH": "master",
+    "BRANCH": "175072065-backend-as-azure-function",
     "ENV_COMMIT_SHA": "IO_BACKEND_COMMIT_SHA"
   },
   {

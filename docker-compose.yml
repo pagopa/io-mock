@@ -199,16 +199,19 @@ services:
       - generated-env/env.io-backend
     labels:
       - "traefik.enable=true"
+      - "traefik.docker.network=io-fn"
       - "traefik.http.routers.backend.rule=Host(`backend.localhost`)"
-      - "traefik.http.routers.backend.entrypoints=web"
-    expose:
-      - "443"
+      - "traefik.http.routers.backend.entrypoints=websecure"
+      - "traefik.http.routers.backend.tls=true"
     ports:
-      - ${IO_BACKEND_PORT}:443
-      - "5859:5859"
-    command: ["yarn", "hot-reload"]
+      - ${IO_BACKEND_PORT}:7071
+    command: ["func", "start", "--javascript"]
     networks:
       - io-fn
+    depends_on:
+      - redis
+      - functions
+      - traefik
     volumes:
       - "./io-backend/certs:/usr/src/app/certs:cached"
 
@@ -280,15 +283,19 @@ services:
     image: traefik:v2.0
     command: |-
       --entrypoints.web.address=:80
+      --entrypoints.websecure.address=:443
       --providers.docker=true
-      --providers.docker.network=io-fn
+      --providers.file.directory=/configuration/
       --log.level=ERROR
     ports:
       - ${API_GATEWAY_PORT}:${API_GATEWAY_PORT}
+      - 443:443
     networks:
       - io-fn
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+      - "./traefik/:/configuration/"
+      - "./io-backend/certs/:/certs/"
     labels:
       # define middleware to be used in some functions services
       - "traefik.http.middlewares.testHeader.headers.customrequestheaders.x-user-id=unused"
