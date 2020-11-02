@@ -17,4 +17,12 @@ RUN apt-get install -y azure-functions-core-tools && \
 ENV AzureWebJobsScriptRoot=/usr/src/app \
     AzureFunctionsJobHost__Logging__Console__IsEnabled=true
 
+#Trust cosmosdb 
+RUN curl https://raw.githubusercontent.com/vercel/cosmosdb-server/master/cert.pem -o /usr/local/share/ca-certificates/cert.pem
+
+RUN openssl x509 -outform der -in /usr/local/share/ca-certificates/cert.pem -out /usr/local/share/ca-certificates/cert.crt
+
+RUN chmod 644 /usr/local/share/ca-certificates/cert.crt && \
+    update-ca-certificates
+
 CMD ["func", "start", "--javascript"]
