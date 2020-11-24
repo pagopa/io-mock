@@ -2,6 +2,10 @@ FROM node:10.14.1
 
 WORKDIR /usr/src/app
 
+COPY functions/cert.crt /usr/local/share/ca-certificates/cert.crt
+
+RUN update-ca-certificates
+
 RUN apt-get update && \
     apt-get install -y lsb-release && \
     curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg && \
