@@ -140,6 +140,27 @@ services:
       - "traefik.http.routers.functions-public.rule=Host(`functions-public.localhost`)"
       - "traefik.http.routers.functions-public.entrypoints=web"
 
+  functions-bpd:
+    image: io-functions-bpd
+    build:
+      context: ${FUNCTIONS_BPD_CONTEXT}
+      dockerfile: ./Dockerfile
+      args:
+        - FUNCTIONS_BPD_COMMIT_SHA
+    env_file:
+      - generated-env/env.io-functions-bpd
+    working_dir: /usr/src/app
+    ports:
+      - ${FUNCTIONS_BPD_PORT}:7071
+    networks:
+      - io-fn
+    depends_on:
+      - functions
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.functions-public.rule=Host(`functions-bpd.localhost`)"
+      - "traefik.http.routers.functions-public.entrypoints=web"
+
   functions-services:
     image: io-functions-services
     build:
