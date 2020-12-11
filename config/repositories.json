@@ -53,5 +53,10 @@
     "GITHUB_REPO": "https://api.github.com/repos/pagopa/io-fixtures/git/ref/heads/",
     "BRANCH": "master",
     "ENV_COMMIT_SHA": "IO_FIXTURES_COMMIT_SHA"
+  },
+  {
+    "GITHUB_REPO": "https://api.github.com/repos/pagopa/io-functions-paymentmanager/git/ref/heads/",
+    "BRANCH": "master",
+    "ENV_COMMIT_SHA": "IO_FUNCTIONS_PAYMENTMANAGER_COMMIT_SHA"
   }
 ]
