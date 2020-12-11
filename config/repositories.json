@@ -56,7 +56,7 @@
   },
   {
     "GITHUB_REPO": "https://api.github.com/repos/pagopa/io-functions-bpd/git/ref/heads/",
-    "BRANCH": "176068708-get-user-bpd",
+    "BRANCH": "master",
     "ENV_COMMIT_SHA": "FUNCTIONS_BPD_COMMIT_SHA"
   }
 ]
