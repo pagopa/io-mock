@@ -187,6 +187,28 @@ services:
       - "traefik.http.routers.functions-bonus.rule=Host(`functions-bonus.localhost`)"
       - "traefik.http.routers.functions-bonus.entrypoints=web"
 
+  functions-paymentmanager:
+    image: io-functions-paymentmanager
+    build:
+      context: ${FUNCTIONS_PAYMENTMANAGER_CONTEXT}
+      dockerfile: ./Dockerfile
+      args:
+        - FUNCTIONS_PAYMENTMANAGER_COMMIT_SHA
+    env_file:
+      - generated-env/env.cosmosdb
+      - generated-env/env.io-functions-paymentmanager
+    working_dir: /usr/src/app
+    ports:
+      - ${FUNCTIONS_PAYMENTMANAGER_PORT}:7071
+    networks:
+      - io-fn
+    depends_on:
+      - functions
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.functions-paymentmanager.rule=Host(`functions-paymentmanager.localhost`)"
+      - "traefik.http.routers.functions-paymentmanager.entrypoints=web"
+
   backend:
     image: io-backend
     build:

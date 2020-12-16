@@ -12,6 +12,7 @@
     "generate:env-functions-admin": "dotenv -e generated-env/.env envsub env.io-functions-admin generated-env/env.io-functions-admin",
     "generate:env-functions-services": "dotenv -e generated-env/.env envsub env.io-functions-services generated-env/env.io-functions-services",
     "generate:env-functions-bonus": "dotenv -e generated-env/.env envsub env.io-functions-bonus generated-env/env.io-functions-bonus",
+    "generate:env-functions-paymentmanager": "dotenv -e generated-env/.env envsub env.io-functions-paymentmanager generated-env/env.io-functions-paymentmanager",
     "generate:env-backend": "dotenv -e generated-env/.env envsub env.io-backend generated-env/env.io-backend",
     "generate:env-notification-hub": "dotenv -e generated-env/.env envsub env.io-notification-hub generated-env/env.io-notification-hub",
     "generate:env-pagopa-proxy": "dotenv -e generated-env/.env envsub env.io-pagopa-proxy generated-env/env.io-pagopa-proxy",
