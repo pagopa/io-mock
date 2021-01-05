@@ -62,7 +62,7 @@ yarn start # build and run all the containers defined in the docker-compose.yaml
 yarn start -d # same but with detatched execution
 yarn stop # stops and destroy all the containers defined in the docker-compose.yaml file
 ```
-
+> *NOTE*: before doing this make sure you have launched `yarn install`  
 ## Run from local directory
 
 By default all services are built from a branch checked out from the relative git repository.
