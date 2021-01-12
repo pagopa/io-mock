@@ -32,7 +32,7 @@ services:
       - "traefik.enable=false"
 
   notificationhub:
-    image: notificationhub
+    image: notificationhub:${NOTIFICATION_HUB_COMMIT_SHA}
     build:
       context: ${NOTIFICATION_HUB_CONTEXT}
       dockerfile: ./Dockerfile
@@ -51,7 +51,7 @@ services:
       - "./io-backend/certs:/usr/src/app/certs:cached"
 
   io-bonus-inps-mock:
-    image: io-bonus-inps-mock
+    image: io-bonus-inps-mock:${IO_BONUS_INPS_MOCK_COMMIT_SHA}
     build:
       context: ${IO_BONUS_INPS_MOCK_CONTEXT}
       dockerfile: ./Dockerfile
@@ -70,7 +70,7 @@ services:
     command: /bin/true
 
   functions-admin:
-    image: io-functions-admin
+    image: io-functions-admin:${FUNCTIONS_ADMIN_COMMIT_SHA}
     build:
       context: ${FUNCTIONS_ADMIN_CONTEXT}
       dockerfile: ./Dockerfile
@@ -95,7 +95,7 @@ services:
       - "traefik.http.routers.functions-admin.middlewares=testHeader,fn-admin-stripprefix"
 
   functions-app:
-    image: io-functions-app
+    image: io-functions-app:${FUNCTIONS_APP_COMMIT_SHA}
     build:
       context: ${FUNCTIONS_APP_CONTEXT}
       dockerfile: ./Dockerfile
@@ -119,7 +119,7 @@ services:
       - "traefik.http.routers.functions-app.entrypoints=web"
 
   functions-public:
-    image: io-functions-public
+    image: io-functions-public:${FUNCTIONS_PUBLIC_COMMIT_SHA}
     build:
       context: ${FUNCTIONS_PUBLIC_CONTEXT}
       dockerfile: ./Dockerfile
@@ -141,7 +141,7 @@ services:
       - "traefik.http.routers.functions-public.entrypoints=web"
 
   functions-services:
-    image: io-functions-services
+    image: io-functions-services:${FUNCTIONS_SERVICES_COMMIT_SHA}
     build:
       context: ${FUNCTIONS_SERVICES_CONTEXT}
       dockerfile: ./Dockerfile
@@ -166,7 +166,7 @@ services:
       - "traefik.http.routers.functions-services.middlewares=testHeader,fn-services-stripprefix"
 
   functions-bonus:
-    image: io-functions-bonus
+    image: io-functions-bonus #:${FUNCTIONS_BONUS_COMMIT_SHA}
     build:
       context: ${FUNCTIONS_BONUS_CONTEXT}
       dockerfile: ./Dockerfile
@@ -188,7 +188,7 @@ services:
       - "traefik.http.routers.functions-bonus.entrypoints=web"
 
   functions-paymentmanager:
-    image: io-functions-paymentmanager
+    image: io-functions-paymentmanager:${FUNCTIONS_PAYMENTMANAGER_COMMIT_SHA}
     build:
       context: ${FUNCTIONS_PAYMENTMANAGER_CONTEXT}
       dockerfile: ./Dockerfile
@@ -210,7 +210,7 @@ services:
       - "traefik.http.routers.functions-paymentmanager.entrypoints=web"
 
   backend:
-    image: io-backend
+    image: io-backend:${IO_BACKEND_COMMIT_SHA}
     build:
       context: ${IO_BACKEND_CONTEXT}
       dockerfile: ./Dockerfile
@@ -235,7 +235,7 @@ services:
       - "./io-backend/certs:/usr/src/app/certs:cached"
 
   pagopa-proxy:
-    image: io-pagopa-proxy
+    image: io-pagopa-proxy:${IO_PAGOPA_PROXY_COMMIT_SHA}
     build:
       context: ${IO_PAGOPA_PROXY_CONTEXT}
       dockerfile: ./Dockerfile
@@ -252,7 +252,7 @@ services:
       - redis
 
   pagopa-nodo-mock:
-    image: io-pagopa-nodo-mock
+    image: io-pagopa-nodo-mock:${IO_PAGOPA_NODO_MOCK_COMMIT_SHA}
     build:
       context: ${IO_PAGOPA_NODO_MOCK_CONTEXT}
       dockerfile: ./Dockerfile
