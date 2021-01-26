@@ -20,7 +20,7 @@ services:
       - generated-env/env.io-fixtures
     build:
       context: ${IO_FIXTURES_CONTEXT}
-      dockerfile: io-fixtures/Dockerfile
+      dockerfile: ./Dockerfile
       args:
         - IO_FIXTURES_COMMIT_SHA
     depends_on:
