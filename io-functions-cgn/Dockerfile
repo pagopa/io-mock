@@ -1,6 +1,6 @@
 FROM functions
 
-ARG FUNCTIONS_BONUS_COMMIT_SHA
+ARG FUNCTIONS_CGN_COMMIT_SHA
 
 RUN git clone https://github.com/pagopa/io-functions-cgn.git /usr/src/app && \
          git checkout $FUNCTIONS_CGN_COMMIT_SHA && \
