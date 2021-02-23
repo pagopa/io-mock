@@ -187,6 +187,28 @@ services:
       - "traefik.http.routers.functions-bonus.rule=Host(`functions-bonus.localhost`)"
       - "traefik.http.routers.functions-bonus.entrypoints=web"
 
+  functions-cgn:
+    image: io-functions-cgn
+    build:
+      context: ${FUNCTIONS_CGN_CONTEXT}
+      dockerfile: ./Dockerfile
+      args:
+        - FUNCTIONS_CGN_COMMIT_SHA
+    env_file:
+      - generated-env/env.cosmosdb
+      - generated-env/env.io-functions-cgn
+    working_dir: /usr/src/app
+    ports:
+      - ${FUNCTIONS_CGN_PORT}:7071
+    networks:
+      - io-fn
+    depends_on:
+      - functions
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.functions-cgn.rule=Host(`functions-cgn.localhost`)"
+      - "traefik.http.routers.functions-cgn.entrypoints=web"
+
   functions-paymentmanager:
     image: io-functions-paymentmanager
     build:
