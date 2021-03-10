@@ -115,8 +115,11 @@ services:
       - fixtures
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.functions-app.rule=Host(`functions-app.localhost`)"
-      - "traefik.http.routers.functions-app.entrypoints=web"
+      - "traefik.http.routers.functions-app.rule=Host(`functions-app.localhost`) || PathPrefix(`/functions-app`)"
+      - "traefik.http.routers.functions-app.entrypoints=websecure"
+      - "traefik.http.routers.functions-app.tls=true"
+      # apply middleware to route
+      - "traefik.http.routers.functions-app.middlewares=fn-app-stripprefix"
 
   functions-public:
     image: io-functions-public
@@ -324,11 +327,13 @@ services:
     image: traefik:v2.0
     command: |-
       --entrypoints.web.address=:80
+      --entrypoints.websecure.address=:8080
       --providers.docker=true
       --providers.docker.network=io-fn
       --log.level=ERROR
     ports:
       - ${API_GATEWAY_PORT}:${API_GATEWAY_PORT}
+      - 8080:8080
     networks:
       - io-fn
     volumes:
@@ -343,6 +348,7 @@ services:
       - "traefik.http.middlewares.testHeader.headers.customrequestheaders.x-functions-key=unused"
       - "traefik.http.middlewares.fn-services-stripprefix.stripprefix.prefixes=/functions-services"
       - "traefik.http.middlewares.fn-admin-stripprefix.stripprefix.prefixes=/functions-admin"
+      - "traefik.http.middlewares.fn-app-stripprefix.stripprefix.prefixes=/functions-app"
 
 networks:
   io-fn:
