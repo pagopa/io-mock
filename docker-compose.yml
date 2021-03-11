@@ -209,6 +209,27 @@ services:
       - "traefik.http.routers.functions-cgn.rule=Host(`functions-cgn.localhost`)"
       - "traefik.http.routers.functions-cgn.entrypoints=web"
 
+  functions-cgn-merchant:
+    image: io-functions-cgn-merchant
+    build:
+      context: ${FUNCTIONS_CGN_MERCHANT_CONTEXT}
+      dockerfile: ./Dockerfile
+      args:
+        - FUNCTIONS_CGN_MERCHANT_COMMIT_SHA
+    env_file:
+      - generated-env/env.io-functions-cgn-merchant
+    working_dir: /usr/src/app
+    ports:
+      - ${FUNCTIONS_CGN_MERCHANT_PORT}:7071
+    networks:
+      - io-fn
+    depends_on:
+      - functions
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.functions-cgn-merchant.rule=Host(`functions-cgn-merchant.localhost`)"
+      - "traefik.http.routers.functions-cgn-merchant.entrypoints=web"
+
   functions-paymentmanager:
     image: io-functions-paymentmanager
     build:
