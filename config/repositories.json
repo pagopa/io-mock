@@ -63,5 +63,10 @@
     "GITHUB_REPO": "https://api.github.com/repos/pagopa/io-functions-cgn/git/ref/heads/",
     "BRANCH": "master",
     "ENV_COMMIT_SHA": "FUNCTIONS_CGN_COMMIT_SHA"
+  },
+  {
+    "GITHUB_REPO": "https://api.github.com/repos/pagopa/io-functions-cgn-merchant/git/ref/heads/",
+    "BRANCH": "master",
+    "ENV_COMMIT_SHA": "FUNCTIONS_CGN_MERCHANT_COMMIT_SHA"
   }
 ]
