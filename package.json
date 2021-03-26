@@ -13,6 +13,7 @@
     "generate:env-functions-services": "dotenv -e generated-env/.env envsub env.io-functions-services generated-env/env.io-functions-services",
     "generate:env-functions-bonus": "dotenv -e generated-env/.env envsub env.io-functions-bonus generated-env/env.io-functions-bonus",
     "generate:env-functions-cgn": "dotenv -e generated-env/.env envsub env.io-functions-cgn generated-env/env.io-functions-cgn",
+    "generate:env-functions-pushnotifications": "dotenv -e generated-env/.env envsub env.io-functions-pushnotifications generated-env/env.io-functions-pushnotifications",
     "generate:env-functions-paymentmanager": "dotenv -e generated-env/.env envsub env.io-functions-paymentmanager generated-env/env.io-functions-paymentmanager",
     "generate:env-backend": "dotenv -e generated-env/.env envsub env.io-backend generated-env/env.io-backend",
     "generate:env-notification-hub": "dotenv -e generated-env/.env envsub env.io-notification-hub generated-env/env.io-notification-hub",
@@ -21,13 +22,16 @@
     "generate:env-fixtures": "dotenv -e generated-env/.env envsub env.io-fixtures generated-env/env.io-fixtures",
     "generate:env-cosmosdb": "dotenv -e generated-env/.env envsub env.cosmosdb generated-env/env.cosmosdb",
     "prestart": "npm-run-all generate",
-    "start": "docker-compose --env-file generated-env/.env up --build",
-    "stop": "docker-compose down"
+    "start": "docker-compose --env-file generated-env/.env up --build functions-pushnotifications",
+    "stop": "docker-compose down",
+    "test":"npm-run-all test:*",
+    "test:functions-pushnotifications":"newman run postman-test-collections/fn-pushnotif-test.postman_collection.json"
   },
   "devDependencies": {
     "dotenv": "^8.2.0",
     "dotenv-cli": "^3.2.0",
     "envsub": "^4.0.7",
+    "newman": "^5.2.2",
     "node-fetch": "^2.6.1",
     "npm-run-all": "^4.1.5",
     "shx": "^0.3.2"

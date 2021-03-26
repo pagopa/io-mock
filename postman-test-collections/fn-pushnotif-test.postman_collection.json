@@ -1,0 +1,222 @@
+{
+	"info": {
+		"_postman_id": "6b0b1b17-f569-4f90-8de1-60db89e40f61",
+		"name": "Push Notifications - Tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Can call Info Endpoint",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Body is correct\", function () {",
+							"    var obj = pm.response.json();",
+							"    pm.expect(obj.name).to.eq(\"@pagopa/io-functions-notifications\");",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-user-id",
+						"value": "unused",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "x-user-groups",
+						"value": "ApiServiceRead,ApiServiceWrite,ApiProfileWrite,ApiServiceList,ApiServiceKeyRead,ApiServiceKeyWrite,ApiUserAdmin,ApiMessageWrite,ApiMessageRead",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "x-subscription-id",
+						"value": "MyServiceId",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "x-user-email",
+						"value": "unused@example.com",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "x-user-note",
+						"value": "unused",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "x-functions-key",
+						"value": "unused",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": "http://localhost:7007/api/v1/info"
+			},
+			"response": []
+		},
+		{
+			"name": "Can create installation",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 202\", function () {",
+							"    pm.response.to.have.status(202);",
+							"});",
+							"",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"input\":\n        \"{ \\\"kind\\\": \\\"CreateOrUpdateInstallation\\\", \\\"installationId\\\": \\\"cfe299cd10dff7cfa143a6a7fa4f89c4f4095dc4614b1d249b9bd9c7070a91dc\\\", \\\"platform\\\": \\\"gcm\\\", \\\"pushChannel\\\": \\\"epbR8rxGSuGReiWkka5tiS:APA9XbHhXQfnOAHudsXmYG9xzqNon8BylHDEzwFAF7oradEof15sRp-U2A-nlAnEJaq_oi44TDV6tmCVzTYzYsNN3EIxREWEnFJtT4uI-AiGK0KPe8T1LKPhOBrhHwwr3SWl-RF3rPjZ\\\", \\\"tags\\\": [\\\"cfe299cd10dff7cfa143a6a7fa4f89c4f4095dc4614b1d249b9bd9c7070a91dc\\\"] }\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:7007/admin/functions/HandleNHNotificationCall"
+			},
+			"response": []
+		},
+		{
+			"name": "Can notify message",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"",
+							" pm.sendRequest(\"http://localhost:8025/api/v1/messages?start=0&limit=10\", function (err, response) {",
+							"     var msgNumber = response.json().length;",
+							"",
+							"    pm.test(\"Status code is 202\", function () {",
+							"        pm.response.to.have.status(202);",
+							"    });",
+							"",
+							"    //Wait 15 seconds to let trigger be called",
+							"    setTimeout(function(){",
+							"",
+							"        pm.sendRequest(\"http://localhost:8025/api/v1/messages?start=0&limit=10\", function (err, response) {",
+							"",
+							"            messages = response.json();",
+							"",
+							"            pm.test(\"New incoming message\", function () {",
+							"                pm.expect(messages.length).to.eq(msgNumber + 1);",
+							"            });",
+							"            ",
+							"        });",
+							"    }, 15000);",
+							"",
+							" });",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"input\":  \"{ \\\"kind\\\": \\\"Notify\\\", \\\"installationId\\\": \\\"cfe299cd10dff7cfa143a6a7fa4f89c4f4095dc4614b1d249b9bd9c7070a91dc\\\",  \\\"payload\\\":{ \\\"message\\\": \\\"Test\\\",  \\\"message_id\\\": \\\"1\\\",\\\"title\\\": \\\"Test\\\"} }\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:7007/admin/functions/HandleNHNotificationCall"
+			},
+			"response": []
+		},
+		{
+			"name": "Can delete installation",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 202\", function () {",
+							"    pm.response.to.have.status(202);",
+							"});",
+							"",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"input\":\n        \"{ \\\"kind\\\": \\\"DeleteInstallation\\\", \\\"installationId\\\": \\\"cfe299cd10dff7cfa143a6a7fa4f89c4f4095dc4614b1d249b9bd9c7070a91dc\\\" }\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:7007/admin/functions/HandleNHNotificationCall"
+			},
+			"response": []
+		}
+	]
+}
