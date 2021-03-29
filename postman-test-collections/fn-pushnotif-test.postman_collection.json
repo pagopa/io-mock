@@ -290,7 +290,7 @@
 						}
 					}
 				},
-				"url": "http://localhost:7007/admin/functions/HandleNHNotificationCall"
+				"url": "{{basePath}}/admin/functions/HandleNHNotificationCall"
 			},
 			"response": []
 		}
