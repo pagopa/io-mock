@@ -134,9 +134,9 @@ Ensure that the VSCode debugger port (`5861` in the example above) match the one
 A set of Postman tests can be found in `postman-test-collections`.
 To run them, just run the mock enviroment and then call
 
-````
+``` bash
 yarn test
-````
+```
 
 ### Add new test
 

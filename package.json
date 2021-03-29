@@ -22,7 +22,7 @@
     "generate:env-fixtures": "dotenv -e generated-env/.env envsub env.io-fixtures generated-env/env.io-fixtures",
     "generate:env-cosmosdb": "dotenv -e generated-env/.env envsub env.cosmosdb generated-env/env.cosmosdb",
     "prestart": "npm-run-all generate",
-    "start": "docker-compose --env-file generated-env/.env up --build functions-pushnotifications",
+    "start": "docker-compose --env-file generated-env/.env up --build",
     "stop": "docker-compose down",
     "test":"npm-run-all test:*",
     "test:functions-pushnotifications":"newman run postman-test-collections/fn-pushnotif-test.postman_collection.json"

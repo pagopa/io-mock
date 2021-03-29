@@ -95,6 +95,31 @@
 						],
 						"type": "text/javascript"
 					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var instId = pm.variables.get(\"installationId\");",
+							"var pushChannel = pm.variables.get(\"pushChannel\");",
+							"var platform = pm.variables.get(\"platform\");",
+							"",
+							"var create_update_msg = {",
+							"            kind: \"CreateOrUpdateInstallation\",",
+							"            installationId: instId,",
+							"            platform: platform,",
+							"            pushChannel: pushChannel,",
+							"            tags: [instId]",
+							"        };",
+							"",
+							"console.log(create_update_msg);",
+							"",
+							"var create_update_msg_json = JSON.stringify(JSON.stringify(create_update_msg));",
+							"",
+							"pm.collectionVariables.set(\"create_update_msg_json\", create_update_msg_json);"
+						],
+						"type": "text/javascript"
+					}
 				}
 			],
 			"request": {
@@ -108,14 +133,14 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"input\":\n        \"{ \\\"kind\\\": \\\"CreateOrUpdateInstallation\\\", \\\"installationId\\\": \\\"cfe299cd10dff7cfa143a6a7fa4f89c4f4095dc4614b1d249b9bd9c7070a91dc\\\", \\\"platform\\\": \\\"gcm\\\", \\\"pushChannel\\\": \\\"epbR8rxGSuGReiWkka5tiS:APA9XbHhXQfnOAHudsXmYG9xzqNon8BylHDEzwFAF7oradEof15sRp-U2A-nlAnEJaq_oi44TDV6tmCVzTYzYsNN3EIxREWEnFJtT4uI-AiGK0KPe8T1LKPhOBrhHwwr3SWl-RF3rPjZ\\\", \\\"tags\\\": [\\\"cfe299cd10dff7cfa143a6a7fa4f89c4f4095dc4614b1d249b9bd9c7070a91dc\\\"] }\"\n}",
+					"raw": "{\n    \"input\": {{create_update_msg_json}}\n}",
 					"options": {
 						"raw": {
 							"language": "json"
 						}
 					}
 				},
-				"url": "http://localhost:7007/admin/functions/HandleNHNotificationCall"
+				"url": "{{basePath}}/admin/functions/HandleNHNotificationCall"
 			},
 			"response": []
 		},
@@ -127,28 +152,59 @@
 					"script": {
 						"exec": [
 							"",
-							" pm.sendRequest(\"http://localhost:8025/api/v1/messages?start=0&limit=10\", function (err, response) {",
-							"     var msgNumber = response.json().length;",
+							"var msgNumber = pm.variables.get(\"msgNumber\");",
 							"",
-							"    pm.test(\"Status code is 202\", function () {",
-							"        pm.response.to.have.status(202);",
-							"    });",
+							"pm.test(\"Status code is 202\", function () {",
+							"    pm.response.to.have.status(202);",
+							"});",
 							"",
-							"    //Wait 15 seconds to let trigger be called",
-							"    setTimeout(function(){",
+							"//Wait 15 seconds to let trigger be called",
+							"setTimeout(function () {",
 							"",
-							"        pm.sendRequest(\"http://localhost:8025/api/v1/messages?start=0&limit=10\", function (err, response) {",
+							"    pm.sendRequest(\"http://localhost:8025/api/v1/messages?start=0&limit=10\", function (err, response) {",
 							"",
-							"            messages = response.json();",
+							"        messages = response.json();",
 							"",
-							"            pm.test(\"New incoming message\", function () {",
-							"                pm.expect(messages.length).to.eq(msgNumber + 1);",
-							"            });",
-							"            ",
+							"        pm.test(\"New incoming message\", function () {",
+							"            pm.expect(messages.length).to.eq(msgNumber + 1);",
 							"        });",
-							"    }, 15000);",
 							"",
-							" });",
+							"    });",
+							"}, 15000);",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var instId = pm.variables.get(\"installationId\");",
+							"",
+							"var notify_msg = {",
+							"    kind: \"Notify\",",
+							"    installationId: instId,",
+							"    payload: {",
+							"        message: \"Msg body test\",",
+							"        message_id: \"1\",",
+							"        title: \"Msg Title\"",
+							"    }",
+							"};",
+							"",
+							"console.log(notify_msg);",
+							"",
+							"var notify_msg_json = JSON.stringify(JSON.stringify(notify_msg));",
+							"",
+							"pm.collectionVariables.set(\"notify_msg_json\", notify_msg_json);",
+							"",
+							"",
+							"//Store messages number in variable, used by tests",
+							"pm.sendRequest(\"http://localhost:8025/api/v1/messages?start=0&limit=10\", function (err, response) {",
+							"    var msgNumber = response.json().length;",
+							"    pm.collectionVariables.set(\"msgNumber\", msgNumber);",
+							"});",
 							""
 						],
 						"type": "text/javascript"
@@ -166,14 +222,14 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"input\":  \"{ \\\"kind\\\": \\\"Notify\\\", \\\"installationId\\\": \\\"cfe299cd10dff7cfa143a6a7fa4f89c4f4095dc4614b1d249b9bd9c7070a91dc\\\",  \\\"payload\\\":{ \\\"message\\\": \\\"Test\\\",  \\\"message_id\\\": \\\"1\\\",\\\"title\\\": \\\"Test\\\"} }\"\n}",
+					"raw": "{\n    \"input\": {{notify_msg_json}}\n}",
 					"options": {
 						"raw": {
 							"language": "json"
 						}
 					}
 				},
-				"url": "http://localhost:7007/admin/functions/HandleNHNotificationCall"
+				"url": "{{basePath}}/admin/functions/HandleNHNotificationCall"
 			},
 			"response": []
 		},
@@ -194,6 +250,26 @@
 						],
 						"type": "text/javascript"
 					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var instId = pm.variables.get(\"installationId\");",
+							"",
+							"var delete_msg = {",
+							"            kind: \"DeleteInstallation\",",
+							"            installationId: instId,",
+							"        };",
+							"",
+							"console.log(delete_msg);",
+							"",
+							"var delete_msg_json = JSON.stringify(JSON.stringify(delete_msg));",
+							"",
+							"pm.collectionVariables.set(\"delete_msg_json\", delete_msg_json);"
+						],
+						"type": "text/javascript"
+					}
 				}
 			],
 			"request": {
@@ -207,7 +283,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"input\":\n        \"{ \\\"kind\\\": \\\"DeleteInstallation\\\", \\\"installationId\\\": \\\"cfe299cd10dff7cfa143a6a7fa4f89c4f4095dc4614b1d249b9bd9c7070a91dc\\\" }\"\n}",
+					"raw": "{\n    \"input\": {{delete_msg_json}}\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -217,6 +293,60 @@
 				"url": "http://localhost:7007/admin/functions/HandleNHNotificationCall"
 			},
 			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "basePath",
+			"value": "http://localhost:7007"
+		},
+		{
+			"key": "installationId",
+			"value": "cee277cd50dff7cfa143a6a7fa4f89c4f4095dc4614b1d249b9bd9c8070a91dc"
+		},
+		{
+			"key": "pushChannel",
+			"value": "epbR4dxGSuGteiWkAa5tiS:APA91bHhXQfnOAHudsXmYG9xzqNonrBylHDEzwFAFRoradEof15sRp-U2A-nlAnEJaq_oi44TDV6tGCVzTYzYsNN3EIxREWEnFJtT4uI-AiGK0KPe8T1LKPhOBrhHwwr3SWl-RF3rPjZ"
+		},
+		{
+			"key": "platform",
+			"value": "gcm"
+		},
+		{
+			"key": "create_update_msg_json",
+			"value": ""
+		},
+		{
+			"key": "notify_msg_json",
+			"value": ""
+		},
+		{
+			"key": "delete_msg_json",
+			"value": ""
+		},
+		{
+			"key": "msgNumber",
+			"value": ""
 		}
 	]
 }
