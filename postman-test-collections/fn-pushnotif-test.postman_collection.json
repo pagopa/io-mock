@@ -1,0 +1,352 @@
+{
+	"info": {
+		"_postman_id": "6b0b1b17-f569-4f90-8de1-60db89e40f61",
+		"name": "Push Notifications - Tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Can call Info Endpoint",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Body is correct\", function () {",
+							"    var obj = pm.response.json();",
+							"    pm.expect(obj.name).to.eq(\"@pagopa/io-functions-notifications\");",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-user-id",
+						"value": "unused",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "x-user-groups",
+						"value": "ApiServiceRead,ApiServiceWrite,ApiProfileWrite,ApiServiceList,ApiServiceKeyRead,ApiServiceKeyWrite,ApiUserAdmin,ApiMessageWrite,ApiMessageRead",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "x-subscription-id",
+						"value": "MyServiceId",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "x-user-email",
+						"value": "unused@example.com",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "x-user-note",
+						"value": "unused",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "x-functions-key",
+						"value": "unused",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": "http://localhost:7007/api/v1/info"
+			},
+			"response": []
+		},
+		{
+			"name": "Can create installation",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 202\", function () {",
+							"    pm.response.to.have.status(202);",
+							"});",
+							"",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var instId = pm.variables.get(\"installationId\");",
+							"var pushChannel = pm.variables.get(\"pushChannel\");",
+							"var platform = pm.variables.get(\"platform\");",
+							"",
+							"var create_update_msg = {",
+							"            kind: \"CreateOrUpdateInstallation\",",
+							"            installationId: instId,",
+							"            platform: platform,",
+							"            pushChannel: pushChannel,",
+							"            tags: [instId]",
+							"        };",
+							"",
+							"console.log(create_update_msg);",
+							"",
+							"var create_update_msg_json = JSON.stringify(JSON.stringify(create_update_msg));",
+							"",
+							"pm.collectionVariables.set(\"create_update_msg_json\", create_update_msg_json);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"input\": {{create_update_msg_json}}\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{basePath}}/admin/functions/HandleNHNotificationCall"
+			},
+			"response": []
+		},
+		{
+			"name": "Can notify message",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"",
+							"var msgNumber = pm.variables.get(\"msgNumber\");",
+							"",
+							"pm.test(\"Status code is 202\", function () {",
+							"    pm.response.to.have.status(202);",
+							"});",
+							"",
+							"//Wait 15 seconds to let trigger be called",
+							"setTimeout(function () {",
+							"",
+							"    pm.sendRequest(\"http://localhost:8025/api/v1/messages?start=0&limit=10\", function (err, response) {",
+							"",
+							"        messages = response.json();",
+							"",
+							"        pm.test(\"New incoming message\", function () {",
+							"            pm.expect(messages.length).to.eq(msgNumber + 1);",
+							"        });",
+							"",
+							"    });",
+							"}, 15000);",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var instId = pm.variables.get(\"installationId\");",
+							"",
+							"var notify_msg = {",
+							"    kind: \"Notify\",",
+							"    installationId: instId,",
+							"    payload: {",
+							"        message: \"Msg body test\",",
+							"        message_id: \"1\",",
+							"        title: \"Msg Title\"",
+							"    }",
+							"};",
+							"",
+							"console.log(notify_msg);",
+							"",
+							"var notify_msg_json = JSON.stringify(JSON.stringify(notify_msg));",
+							"",
+							"pm.collectionVariables.set(\"notify_msg_json\", notify_msg_json);",
+							"",
+							"",
+							"//Store messages number in variable, used by tests",
+							"pm.sendRequest(\"http://localhost:8025/api/v1/messages?start=0&limit=10\", function (err, response) {",
+							"    var msgNumber = response.json().length;",
+							"    pm.collectionVariables.set(\"msgNumber\", msgNumber);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"input\": {{notify_msg_json}}\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{basePath}}/admin/functions/HandleNHNotificationCall"
+			},
+			"response": []
+		},
+		{
+			"name": "Can delete installation",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 202\", function () {",
+							"    pm.response.to.have.status(202);",
+							"});",
+							"",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var instId = pm.variables.get(\"installationId\");",
+							"",
+							"var delete_msg = {",
+							"            kind: \"DeleteInstallation\",",
+							"            installationId: instId,",
+							"        };",
+							"",
+							"console.log(delete_msg);",
+							"",
+							"var delete_msg_json = JSON.stringify(JSON.stringify(delete_msg));",
+							"",
+							"pm.collectionVariables.set(\"delete_msg_json\", delete_msg_json);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"input\": {{delete_msg_json}}\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{basePath}}/admin/functions/HandleNHNotificationCall"
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "basePath",
+			"value": "http://localhost:7007"
+		},
+		{
+			"key": "installationId",
+			"value": "cee277cd50dff7cfa143a6a7fa4f89c4f4095dc4614b1d249b9bd9c8070a91dc"
+		},
+		{
+			"key": "pushChannel",
+			"value": "epbR4dxGSuGteiWkAa5tiS:APA91bHhXQfnOAHudsXmYG9xzqNonrBylHDEzwFAFRoradEof15sRp-U2A-nlAnEJaq_oi44TDV6tGCVzTYzYsNN3EIxREWEnFJtT4uI-AiGK0KPe8T1LKPhOBrhHwwr3SWl-RF3rPjZ"
+		},
+		{
+			"key": "platform",
+			"value": "gcm"
+		},
+		{
+			"key": "create_update_msg_json",
+			"value": ""
+		},
+		{
+			"key": "notify_msg_json",
+			"value": ""
+		},
+		{
+			"key": "delete_msg_json",
+			"value": ""
+		},
+		{
+			"key": "msgNumber",
+			"value": ""
+		}
+	]
+}

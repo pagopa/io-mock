@@ -208,6 +208,29 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.functions-cgn.rule=Host(`functions-cgn.localhost`)"
       - "traefik.http.routers.functions-cgn.entrypoints=web"
+  
+  functions-pushnotifications:
+    image: io-functions-pushnotifications
+    build:
+      context: ${FUNCTIONS_PUSHNOTIF_CONTEXT}
+      dockerfile: ./Dockerfile
+      args:
+        - FUNCTIONS_PUSHNOTIF_COMMIT_SHA
+    env_file:
+      - generated-env/env.io-functions-pushnotifications
+    working_dir: /usr/src/app
+    ports:
+      - ${FUNCTIONS_PUSHNOTIF_PORT}:7071
+    networks:
+      - io-fn
+    depends_on:
+      - functions
+      - notificationhub
+      - mailhog
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.functions-pushnotif.rule=Host(`functions-pushnotif.localhost`)"
+      - "traefik.http.routers.functions-pushnotif.entrypoints=web"
 
   functions-paymentmanager:
     image: io-functions-paymentmanager
