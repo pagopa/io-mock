@@ -86,6 +86,7 @@ services:
       - io-fn
     depends_on:
       - functions
+      - traefik
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.functions-admin.rule=Host(`functions-admin.localhost`) || PathPrefix(`/functions-admin`)"
