@@ -1,0 +1,20 @@
+version: "3.2"
+
+services:
+  functions-eucovidcert:
+    build:
+      context: base/functions
+    volumes:
+      - "../io-functions-eucovidcerts:/usr/src/app:delegated"
+      # use
+      # - "../io-functions-admin:/usr/src/app:delegated"
+      # if you're on Mac to avoid CPU exhaustion
+    ports:
+      - ${FUNCTIONS_EUCOVIDCERT_PORT}:7071
+      # node inspector
+      - "5861:5861"
+    command: ["func", "start", "--javascript"]
+    environment:
+      - languageWorkers__node__arguments="--inspect=0.0.0.0:5861"
+    labels:
+      - traefik.http.services.functions-eucovidcert.loadbalancer.server.port=7071

@@ -15,6 +15,7 @@
     "generate:env-functions-cgn": "dotenv -e generated-env/.env envsub env.io-functions-cgn generated-env/env.io-functions-cgn",
     "generate:env-functions-pushnotifications": "dotenv -e generated-env/.env envsub env.io-functions-pushnotifications generated-env/env.io-functions-pushnotifications",
     "generate:env-functions-paymentmanager": "dotenv -e generated-env/.env envsub env.io-functions-paymentmanager generated-env/env.io-functions-paymentmanager",
+    "generate:env-functions-eucovidcert": "dotenv -e generated-env/.env envsub env.io-functions-eucovidcert generated-env/env.io-functions-eucovidcert",
     "generate:env-backend": "dotenv -e generated-env/.env envsub env.io-backend generated-env/env.io-backend",
     "generate:env-notification-hub": "dotenv -e generated-env/.env envsub env.io-notification-hub generated-env/env.io-notification-hub",
     "generate:env-pagopa-proxy": "dotenv -e generated-env/.env envsub env.io-pagopa-proxy generated-env/env.io-pagopa-proxy",
@@ -24,8 +25,8 @@
     "prestart": "npm-run-all generate",
     "start": "docker-compose --env-file generated-env/.env up --build",
     "stop": "docker-compose down",
-    "test":"npm-run-all test:*",
-    "test:functions-pushnotifications":"newman run postman-test-collections/fn-pushnotif-test.postman_collection.json"
+    "test": "npm-run-all test:*",
+    "test:functions-pushnotifications": "newman run postman-test-collections/fn-pushnotif-test.postman_collection.json"
   },
   "devDependencies": {
     "dotenv": "^8.2.0",
