@@ -68,5 +68,10 @@
     "GITHUB_REPO": "https://api.github.com/repos/pagopa/io-functions-pushnotifications/git/ref/heads/",
     "BRANCH": "master",
     "ENV_COMMIT_SHA": "FUNCTIONS_PUSHNOTIF_COMMIT_SHA"
+  },
+  {
+    "GITHUB_REPO": "https://api.github.com/repos/pagopa/io-functions-eucovidcerts/git/ref/heads/",
+    "BRANCH": "master",
+    "ENV_COMMIT_SHA": "FUNCTIONS_EUCOVIDCERTS_COMMIT_SHA"
   }
 ]
