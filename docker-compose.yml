@@ -95,6 +95,32 @@ services:
       # apply middleware to route
       - "traefik.http.routers.functions-admin.middlewares=testHeader,fn-admin-stripprefix"
 
+  functions-eucovidcert:
+    image: io-functions-eucovidcert
+    build:
+      context: ${FUNCTIONS_EUCOVIDCERT_CONTEXT}
+      dockerfile: ./Dockerfile
+      args:
+        - FUNCTIONS_EUCOVIDCERT_COMMIT_SHA
+    env_file:
+      - generated-env/env.cosmosdb
+      - generated-env/env.io-functions-eucovidcert
+    working_dir: /usr/src/app
+    ports:
+      - ${FUNCTIONS_EUCOVIDCERT_PORT}:7071
+    networks:
+      - io-fn
+    depends_on:
+      - functions
+      - traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.functions-eucovidcert.rule=Host(`functions-eucovidcert.localhost`) || PathPrefix(`/functions-eucovidcert`)"
+      - "traefik.http.routers.functions-eucovidcert.entrypoints=web"
+
+      # apply middleware to route
+      - "traefik.http.routers.functions-eucovidcert.middlewares=testHeader,fn-eucovidcert-stripprefix"
+
   functions-app:
     image: io-functions-app
     build:
@@ -209,7 +235,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.functions-cgn.rule=Host(`functions-cgn.localhost`)"
       - "traefik.http.routers.functions-cgn.entrypoints=web"
-  
+
   functions-pushnotifications:
     image: io-functions-pushnotifications
     build:
@@ -367,6 +393,7 @@ services:
       - "traefik.http.middlewares.testHeader.headers.customrequestheaders.x-functions-key=unused"
       - "traefik.http.middlewares.fn-services-stripprefix.stripprefix.prefixes=/functions-services"
       - "traefik.http.middlewares.fn-admin-stripprefix.stripprefix.prefixes=/functions-admin"
+      - "traefik.http.middlewares.fn-eucovidcert-stripprefix.stripprefix.prefixes=/functions-eucovidcert"
 
 networks:
   io-fn:
