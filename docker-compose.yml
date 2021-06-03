@@ -244,6 +244,27 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.functions-pushnotif.rule=Host(`functions-pushnotif.localhost`)"
       - "traefik.http.routers.functions-pushnotif.entrypoints=web"
+  
+  functions-eucovidcerts:
+    image: io-functions-eucovidcerts
+    build:
+      context: ${FUNCTIONS_EUCOVIDCERTS_CONTEXT}
+      dockerfile: ./Dockerfile
+      args:
+        - FUNCTIONS_EUCOVIDCERTS_COMMIT_SHA
+    env_file:
+      - generated-env/env.io-functions-eucovidcerts
+    working_dir: /usr/src/app
+    ports:
+      - ${FUNCTIONS_EUCOVIDCERTS_PORT}:7071
+    networks:
+      - io-fn
+    depends_on:
+      - functions
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.functions-eucovidcerts.rule=Host(`functions-eucovidcerts.localhost`)"
+      - "traefik.http.routers.functions-eucovidcerts.entrypoints=web"
 
   functions-paymentmanager:
     image: io-functions-paymentmanager
