@@ -69,6 +69,13 @@ services:
       dockerfile: functions/Dockerfile
     command: /bin/true
 
+  functions-node-14:
+    image: functions-node-14
+    build:
+      context: ./
+      dockerfile: functions-node-14/Dockerfile
+    command: /bin/true
+
   functions-admin:
     image: io-functions-admin
     build:
@@ -87,6 +94,7 @@ services:
     depends_on:
       - functions
       - traefik
+      - redis
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.functions-admin.rule=Host(`functions-admin.localhost`) || PathPrefix(`/functions-admin`)"
@@ -111,7 +119,7 @@ services:
     networks:
       - io-fn
     depends_on:
-      - functions
+      - functions-node-14
       - notificationhub
       - fixtures
     labels:
@@ -367,7 +375,7 @@ services:
       - "traefik.http.middlewares.testHeader.headers.customrequestheaders.x-functions-key=unused"
       - "traefik.http.middlewares.fn-services-stripprefix.stripprefix.prefixes=/functions-services"
       - "traefik.http.middlewares.fn-admin-stripprefix.stripprefix.prefixes=/functions-admin"
-
+      
 networks:
   io-fn:
     driver: bridge
