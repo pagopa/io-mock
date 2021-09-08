@@ -92,7 +92,7 @@ services:
     networks:
       - io-fn
     depends_on:
-      - functions
+      - functions-node-14
       - traefik
       - redis
     labels:
@@ -122,6 +122,7 @@ services:
       - functions-node-14
       - notificationhub
       - fixtures
+      - traefik
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.functions-app.rule=Host(`functions-app.localhost`)"
@@ -165,7 +166,10 @@ services:
     networks:
       - io-fn
     depends_on:
-      - functions
+      - functions-node-14
+      - fixtures
+      - traefik
+      - functions-admin
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.functions-services.rule=Host(`functions-services.localhost`) || PathPrefix(`/functions-services`)"
