@@ -260,7 +260,8 @@ services:
     networks:
       - io-fn
     depends_on:
-      - functions
+      - functions-node-14
+      - traefik
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.functions-eucovidcerts.rule=Host(`functions-eucovidcerts.localhost`)"
