@@ -5,3 +5,4 @@ yarn-error.log
 generated-env
 node_modules
 docker-compose.override.yml
+.DS_Store
