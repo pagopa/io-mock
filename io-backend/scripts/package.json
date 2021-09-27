@@ -1,8 +1,0 @@
-{
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "scripts": {
-    "generate:test-certs": "./_generate-test-certs.sh ."
-  }
-}
