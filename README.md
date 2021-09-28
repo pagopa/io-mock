@@ -55,6 +55,17 @@ Database and storage are shared among each application in the mock.
 | ------------ | ------------------------------------------------- |
 | GITHUB_TOKEN | Auth token to access our private Github registry. |
 
+### Generate new SPID certs and metadata
+This is useful when the provided ones are expired.
+
+Within io-mock folder, run:
+* `rm -rf io-backend/certs/*` 
+* `yarn generate-spid-certs`
+
+Check that:
+* new `cert.pem` and `key.pem` are created inside `io-backend/certs`,
+* `sp_metadata.xml` is updated inside `testenv2/conf`.
+
 ## Execute
 
 ```sh

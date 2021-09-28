@@ -21,12 +21,14 @@
     "generate:env-pagopa-nodo-mock": "dotenv -e generated-env/.env envsub env.io-pagopa-nodo-mock generated-env/env.io-pagopa-nodo-mock",
     "generate:env-fixtures": "dotenv -e generated-env/.env envsub env.io-fixtures generated-env/env.io-fixtures",
     "generate:env-cosmosdb": "dotenv -e generated-env/.env envsub env.cosmosdb generated-env/env.cosmosdb",
+    "generate-spid-certs": "./scripts/generate-spid-certs.sh",
+    "generate-test-certs": "./scripts/generate-test-certs.sh ./io-backend/certs",
     "prestart": "npm-run-all generate",
     "start": "docker-compose --env-file generated-env/.env up --build",
     "stop": "docker-compose down",
-    "test":"npm-run-all test:*",
-    "test:functions-pushnotifications":"newman run postman-test-collections/fn-pushnotif-test.postman_collection.json",
-    "test:functions-services":"newman run postman-test-collections/fn-services-test.postman_collection.json"
+    "test": "npm-run-all test:*",
+    "test:functions-pushnotifications": "newman run postman-test-collections/fn-pushnotif-test.postman_collection.json",
+    "test:functions-services": "newman run postman-test-collections/fn-services-test.postman_collection.json"
   },
   "devDependencies": {
     "dotenv": "^8.2.0",
