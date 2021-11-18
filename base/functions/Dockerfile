@@ -1,2 +1,2 @@
-FROM functions
+FROM functions-node-14
 
