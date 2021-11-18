@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<EntityDescriptor xmlns="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" entityID="https://spid.agid.gov.it/cd" ID="https___spid_agid_gov_it_cd"><Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/><SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/><Reference URI="#https___spid_agid_gov_it_cd"><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><DigestValue>gZ866FWcSP24RWa0FqLMzWQY4QNDUAQUvOjaXzThiUw=</DigestValue></Reference></SignedInfo><SignatureValue>PEFUjnf9LFvbGDEccp5eCu5DxmwJ4g74YaDfrDDJhoU57SxMI3YV6J+adUBqldK6Qxa24gx4iHy5DWwvFMfDNef435ibwlicMVGsUWW/dwKZHiq+0V5hEqvO8x3wBs2JVnOBhTWAblfjYeQ2Mao9QUJcZx+qKZrXWBp38iHDvWYq28LRJwh3cH7IpcnAzRp5X8WLG1edXlIGGOr82n87VGy8YLrcmGs4Uub0wtt2oTycVGrcqMIqypTuePo/JWr3gsshUjccY7VMSkHrVAEA2WOGHxm3TdGdcI0vH9Ks5ZekgDnP1D1EzKwHYNq3BnyhlkRNH/9of7skoKmUNMoN7voZ+V3N7YNCz4Z8svpPEFtS9iyWFYWTwtuYiT335ixb0s2Z6etiOxJIPhL6rjrV/4UbBZP1QphxXzEHJFzS3HK+19mQIL5IsKj/zH7l9XhJ/gEe+2jQxmltBaTjM+hsjxC3SCRUEqvk3PJpUL2w4HSMVbCV4lXztYHoa6eHx8GLV3u+Svjzj/VWXIHwjsGfdYLWz4PziYZ5bGBQP1gMxg9dZRiyPfydR67o7DrA95V0+iOYx2XxzCfTMSPopqFLWrJLwRkrJ8GGoAjAJrEesZ8PiqpVo0xHUwpZfXM0RsJesr/Sj8s5nZC07HglQyx2fKBAGYm/L96XlDd+J28bKY0=</SignatureValue><KeyInfo><X509Data><X509Certificate>MIIFsjCCA5qgAwIBAgIJALx3AGZNS26iMA0GCSqGSIb3DQEBCwUAMG4xCzAJBgNV
+<EntityDescriptor xmlns="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" entityID="https://spid.agid.gov.it/cd" ID="https___spid_agid_gov_it_cd">
+  <Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
+    <SignedInfo>
+      <CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" />
+      <SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256" />
+      <Reference URI="#https___spid_agid_gov_it_cd">
+        <Transforms>
+          <Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" />
+          <Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" />
+        </Transforms>
+        <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" />
+        <DigestValue>NnkLH3ey4lQYASOqyTKjElvGrB2RNgq7iyzNuTa/Rus=</DigestValue>
+      </Reference>
+    </SignedInfo>
+    <SignatureValue>SMqJ//M1vvS/0OS3QLo5JqXRsg447WzVn26XHUKlDSP7qwi5zf0ijxP4fMBADiBYb/+MoYWjti9coJhfrphB55duAyrq052hX2+QejSTNs6gqG3C5r96jMQBtujPkFDcfoZIGd1aPO9xS4JQedcfvUdnimLL6pr7VpamTshzei/pHOx294WpuhL8Gnucpjmwt3iuHNKnJnZ9TvksdI4ZmlOic9o8bqGQuMf4XG4UHOqbbz2luXLbUp3o7HijXiYC81dNUbYhFsSmw3AIsLfTmDAM2iweU7828A4w0gy8ILn18mSogX5SOB+yMTmwPupHn0eNDKcNe9sH9oAFD3rpS2wbxKipk1DwoYfXN6E8P9qkgJ63ug5eL/PtbydS/vchi044SvvRoZcXmFzGM3/s87eJadoXn1wWS5132CKKroAOXL1O1fZgE/C1JdfNyWD9SQnzsy5RyA5AhBqNclQ2WfKUAqz7bQyyenzGdmVgknos+v2Gi1YuNpps5WLKn9T7Bjqq5am/P6iArvZsmXx7dNKpR8LFnaZQckcDxVifEIwttXTqPaAaxutn+dnNbJsyFVvEiTbAT8US8ZNsZKKbrJcNDt57HyCAlJmh1RZMoJvzM2w8XCzHoFakM5XP410YMdChhUKOrmT9Bufs7Zgev2qQ9DXX4LCxnGNWVlZu8Fo=</SignatureValue>
+    <KeyInfo>
+      <X509Data>
+        <X509Certificate>MIIFsjCCA5qgAwIBAgIJALx3AGZNS26iMA0GCSqGSIb3DQEBCwUAMG4xCzAJBgNV
 BAYTAklUMQ4wDAYDVQQIDAVJdGFseTENMAsGA1UEBwwEUm9tZTENMAsGA1UECgwE
 QUNNRTEWMBQGA1UECwwNSVQgRGVwYXJ0bWVudDEZMBcGA1UEAwwQYXBpLml0YWxp
 YS5sb2NhbDAeFw0yMTA5MjcxMzAyMTlaFw0yMjA5MjcxMzAyMTlaMG4xCzAJBgNV
@@ -30,7 +47,10 @@ hMqvOCyzh/+UQMCz72CeK94s+VePTh/iNc9WwKRSz/kcQGIfoJM/lLm0+1MFN0dQ
 K0soPWUjvgLEPdaaez48PviInlpvj+HOp5NQWboBsSQXvwUCGewvoLPQbWsP3MbO
 tecTh5YovWEkhZ9FNLt5QbiTDPyc66ibYSxDh/HsvgV614wSGIXtf/m8iq7daVx+
 h51PO3gNewXosUbrfuQXuROfJ2elBQ==
-</X509Certificate></X509Data></KeyInfo></Signature>
+</X509Certificate>
+      </X509Data>
+    </KeyInfo>
+  </Signature>
   <SPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol" AuthnRequestsSigned="true" WantAssertionsSigned="true" xmlns="urn:oasis:names:tc:SAML:2.0:metadata">
     <KeyDescriptor use="signing">
       <ds:KeyInfo>
@@ -70,17 +90,16 @@ h51PO3gNewXosUbrfuQXuROfJ2elBQ==
         </ds:X509Data>
       </ds:KeyInfo>
     </KeyDescriptor>
-    <SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="http://italia-backend/slo"/>
+    <SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="http://italia-backend/slo" />
     <NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:transient</NameIDFormat>
-    <AssertionConsumerService index="0" isDefault="true" Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://localhost:8000/assertionConsumerService"/>
+    <AssertionConsumerService index="0" isDefault="true" Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://localhost:8000/assertionConsumerService" />
     <AttributeConsumingService index="0">
-      <ServiceName xml:lang="it">Required attributes</ServiceName>
-      <RequestedAttribute FriendlyName="Indirizzo" Name="address" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic"/>
-      <RequestedAttribute FriendlyName="Email" Name="email" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic"/>
-      <RequestedAttribute FriendlyName="Nome" Name="name" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic"/>
-      <RequestedAttribute FriendlyName="Cognome" Name="familyName" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic"/>
-      <RequestedAttribute FriendlyName="Codice fiscale" Name="fiscalNumber" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic"/>
-      <RequestedAttribute FriendlyName="Numero di telefono" Name="mobilePhone" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic"/>
+      <ServiceName xml:lang="it">IO - l'app dei servizi pubblici BETA</ServiceName>
+      <RequestedAttribute FriendlyName="Email" Name="email" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic" />
+      <RequestedAttribute FriendlyName="Nome" Name="name" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic" />
+      <RequestedAttribute FriendlyName="Cognome" Name="familyName" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic" />
+      <RequestedAttribute FriendlyName="Codice fiscale" Name="fiscalNumber" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic" />
+      <RequestedAttribute FriendlyName="Data di nascita" Name="dateOfBirth" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic" />
     </AttributeConsumingService>
   </SPSSODescriptor>
   <Organization>
