@@ -1,4 +1,4 @@
-FROM functions
+FROM functions-node-14
 
 ARG FUNCTIONS_PAYMENTMANAGER_COMMIT_SHA
 

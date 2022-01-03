@@ -221,7 +221,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.functions-cgn.rule=Host(`functions-cgn.localhost`)"
       - "traefik.http.routers.functions-cgn.entrypoints=web"
-  
+
   functions-pushnotifications:
     image: io-functions-pushnotifications
     build:
@@ -244,7 +244,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.functions-pushnotif.rule=Host(`functions-pushnotif.localhost`)"
       - "traefik.http.routers.functions-pushnotif.entrypoints=web"
-  
+
   functions-eucovidcerts:
     image: io-functions-eucovidcerts
     build:
@@ -266,28 +266,6 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.functions-eucovidcerts.rule=Host(`functions-eucovidcerts.localhost`)"
       - "traefik.http.routers.functions-eucovidcerts.entrypoints=web"
-
-  functions-paymentmanager:
-    image: io-functions-paymentmanager
-    build:
-      context: ${FUNCTIONS_PAYMENTMANAGER_CONTEXT}
-      dockerfile: ./Dockerfile
-      args:
-        - FUNCTIONS_PAYMENTMANAGER_COMMIT_SHA
-    env_file:
-      - generated-env/env.cosmosdb
-      - generated-env/env.io-functions-paymentmanager
-    working_dir: /usr/src/app
-    ports:
-      - ${FUNCTIONS_PAYMENTMANAGER_PORT}:7071
-    networks:
-      - io-fn
-    depends_on:
-      - functions
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.functions-paymentmanager.rule=Host(`functions-paymentmanager.localhost`)"
-      - "traefik.http.routers.functions-paymentmanager.entrypoints=web"
 
   backend:
     image: io-backend
@@ -314,39 +292,39 @@ services:
     volumes:
       - "./io-backend/certs:/usr/src/app/certs:cached"
 
-  pagopa-proxy:
-    image: io-pagopa-proxy
-    build:
-      context: ${IO_PAGOPA_PROXY_CONTEXT}
-      dockerfile: ./Dockerfile
-      args:
-        - GITHUB_TOKEN
-        - IO_PAGOPA_PROXY_COMMIT_SHA
-    env_file:
-      - generated-env/env.io-pagopa-proxy
-    ports:
-      - ${PAGOPAPROXY_PORT}:3001
-    networks:
-      - io-fn
-    depends_on:
-      - redis
+  # pagopa-proxy:
+  #   image: io-pagopa-proxy
+  #   build:
+  #     context: ${IO_PAGOPA_PROXY_CONTEXT}
+  #     dockerfile: ./Dockerfile
+  #     args:
+  #       - GITHUB_TOKEN
+  #       - IO_PAGOPA_PROXY_COMMIT_SHA
+  #   env_file:
+  #     - generated-env/env.io-pagopa-proxy
+  #   ports:
+  #     - ${PAGOPAPROXY_PORT}:3001
+  #   networks:
+  #     - io-fn
+  #   depends_on:
+  #     - redis
 
-  pagopa-nodo-mock:
-    image: io-pagopa-nodo-mock
-    build:
-      context: ${IO_PAGOPA_NODO_MOCK_CONTEXT}
-      dockerfile: ./Dockerfile
-      args:
-        - GITHUB_TOKEN
-        - IO_PAGOPA_NODO_MOCK_COMMIT_SHA
-    env_file:
-      - generated-env/env.io-pagopa-nodo-mock
-    ports:
-      - ${PAGOPA_PORT}:3002
-    networks:
-      - io-fn
-    depends_on:
-      - pagopa-proxy
+  # pagopa-nodo-mock:
+  #   image: io-pagopa-nodo-mock
+  #   build:
+  #     context: ${IO_PAGOPA_NODO_MOCK_CONTEXT}
+  #     dockerfile: ./Dockerfile
+  #     args:
+  #       - GITHUB_TOKEN
+  #       - IO_PAGOPA_NODO_MOCK_COMMIT_SHA
+  #   env_file:
+  #     - generated-env/env.io-pagopa-nodo-mock
+  #   ports:
+  #     - ${PAGOPA_PORT}:3002
+  #   networks:
+  #     - io-fn
+  #   depends_on:
+  #     - pagopa-proxy
 
   redis:
     container_name: redis
@@ -401,7 +379,7 @@ services:
       - "traefik.http.middlewares.testHeader.headers.customrequestheaders.x-functions-key=unused"
       - "traefik.http.middlewares.fn-services-stripprefix.stripprefix.prefixes=/functions-services"
       - "traefik.http.middlewares.fn-admin-stripprefix.stripprefix.prefixes=/functions-admin"
-      
+
 networks:
   io-fn:
     driver: bridge
