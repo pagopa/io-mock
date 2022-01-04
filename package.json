@@ -13,6 +13,7 @@
     "generate:env-functions-services": "dotenv -e generated-env/.env envsub env.io-functions-services generated-env/env.io-functions-services",
     "generate:env-functions-bonus": "dotenv -e generated-env/.env envsub env.io-functions-bonus generated-env/env.io-functions-bonus",
     "generate:env-functions-cgn": "dotenv -e generated-env/.env envsub env.io-functions-cgn generated-env/env.io-functions-cgn",
+    "generate:env-functions-cgn-operator-search": "dotenv -e generated-env/.env envsub env.io-functions-cgn-operator-search generated-env/env.io-functions-cgn-operator-search",
     "generate:env-functions-pushnotifications": "dotenv -e generated-env/.env envsub env.io-functions-pushnotifications generated-env/env.io-functions-pushnotifications",
     "generate:env-functions-eucovidcerts": "dotenv -e generated-env/.env envsub env.io-functions-eucovidcerts generated-env/env.io-functions-eucovidcerts",
     "generate:env-functions-paymentmanager": "dotenv -e generated-env/.env envsub env.io-functions-paymentmanager generated-env/env.io-functions-paymentmanager",

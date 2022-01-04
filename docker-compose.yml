@@ -13,6 +13,17 @@ services:
     networks:
       - io-fn
 
+  db:
+    image: 'postgis/postgis:11-2.5'
+    container_name: db
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=compose-postgres
+      - POSTGRES_PASSWORD=compose-postgres
+    networks:
+      - io-fn
+
   fixtures:
     image: io-fixtures
     env_file:
@@ -221,6 +232,28 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.functions-cgn.rule=Host(`functions-cgn.localhost`)"
       - "traefik.http.routers.functions-cgn.entrypoints=web"
+
+  functions-cgn-operator-search:
+    image: io-functions-cgn-operator-search
+    build:
+      context: ${FUNCTIONS_CGN_OPERATOR_SEARCH_CONTEXT}
+      dockerfile: ./Dockerfile
+      args:
+        - FUNCTIONS_CGN_OPERATOR_SEARCH_COMMIT_SHA
+    env_file:
+      - generated-env/env.io-functions-cgn-operator-search
+    working_dir: /usr/src/app
+    ports:
+      - ${FUNCTIONS_CGN_OPERATOR_SEARCH_PORT}:7071
+    networks:
+      - io-fn
+    depends_on:
+      - functions-node-14
+      - db
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.functions-cgn-operator-search.rule=Host(`functions-cgn-operator-search.localhost`)"
+      - "traefik.http.routers.functions-cgn-operator-search.entrypoints=web"
 
   functions-pushnotifications:
     image: io-functions-pushnotifications
