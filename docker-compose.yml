@@ -412,6 +412,7 @@ services:
       - "traefik.http.middlewares.fn-services-stripprefix.stripprefix.prefixes=/functions-services"
       - "traefik.http.middlewares.fn-admin-stripprefix.stripprefix.prefixes=/functions-admin"
       - "traefik.http.middlewares.fn-app-stripprefix.stripprefix.prefixes=/functions-app"
+      - "traefik.http.middlewares.fn-app-messages-stripprefix.stripprefix.prefixes=/functions-app-messages"
 
 networks:
   io-fn:
