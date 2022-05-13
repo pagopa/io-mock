@@ -10,6 +10,11 @@
     "ENV_COMMIT_SHA": "FUNCTIONS_APP_COMMIT_SHA"
   },
   {
+    "GITHUB_REPO": "https://api.github.com/repos/pagopa/io-functions-app-messages/git/ref/heads/",
+    "BRANCH": "master",
+    "ENV_COMMIT_SHA": "FUNCTIONS_APP_MESSAGES_COMMIT_SHA"
+  },
+  {
     "GITHUB_REPO": "https://api.github.com/repos/pagopa/io-functions-public/git/ref/heads/",
     "BRANCH": "master",
     "ENV_COMMIT_SHA": "FUNCTIONS_PUBLIC_COMMIT_SHA"
