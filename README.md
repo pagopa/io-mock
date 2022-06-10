@@ -152,3 +152,4 @@ yarn test
 ### Add new test
 
 Create a new postman collection within `postman-test-collections` folder and add a new `"test:___` script in `package.json`
+
