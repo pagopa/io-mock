@@ -15,7 +15,7 @@ RUN rm -rf * && \
 
 RUN ./scripts/init-npm.sh
 
-RUN yarn install && \
+RUN yarn install --frozen-lockfile && \
   yarn generate:proxy-models && \
   yarn build
 
