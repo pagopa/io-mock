@@ -13,8 +13,6 @@ RUN rm -rf * && \
   git clone https://github.com/pagopa/io-backend.git /usr/src/app && \
   git checkout $IO_BACKEND_COMMIT_SHA
 
-RUN ./scripts/init-npm.sh
-
 RUN yarn install --frozen-lockfile && \
   yarn generate:proxy-models && \
   yarn build
