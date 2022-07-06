@@ -1,16 +1,16 @@
 FROM node:12-alpine
 
 RUN apk update && apk upgrade && \
-    apk add --no-cache bash ca-certificates git openssh openssl
+  apk add --no-cache bash ca-certificates git openssh openssl
 
 WORKDIR /usr/src/app
 
 ARG IO_FIXTURES_COMMIT_SHA
 
 RUN rm -rf * && \
-    git clone https://github.com/pagopa/io-fixtures.git /usr/src/app && \
-    git checkout $IO_FIXTURES_COMMIT_SHA
+  git clone https://github.com/pagopa/io-fixtures.git /usr/src/app && \
+  git checkout $IO_FIXTURES_COMMIT_SHA
 
-RUN yarn install
+RUN yarn install --frozen-lockfile
 
 CMD ["yarn", "start"]
