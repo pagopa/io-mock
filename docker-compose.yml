@@ -62,6 +62,21 @@ services:
     networks:
       - io-fn
 
+  io-pn-mock:
+    build:
+      context: ${IO_PN_MOCK_CONTEXT}
+      dockerfile: ./Dockerfile
+      args:
+        - IO_PN_MOCK_COMMIT_SHA
+    env_file:
+      - generated-env/env.io-pn-mock
+    ports:
+      - ${IO_PN_MOCK_PORT}:3004
+    networks: 
+      - io-fn
+    depends_on:
+      - cosmosdb
+    
   functions:
     image: functions
     build:
