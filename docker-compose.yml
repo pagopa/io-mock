@@ -76,6 +76,8 @@ services:
       - io-fn
     depends_on:
       - cosmosdb
+    extra_hosts:
+      - host.docker.internal:host-gateway
     
   functions:
     image: functions
