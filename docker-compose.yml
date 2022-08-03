@@ -1,4 +1,4 @@
-version: "3.2"
+version: "3.8"
 
 services:
   cosmosdb:
@@ -76,6 +76,7 @@ services:
       - io-fn
     depends_on:
       - cosmosdb
+      - fixtures
     extra_hosts:
       - host.docker.internal:host-gateway
     
@@ -223,7 +224,7 @@ services:
       - "traefik.http.routers.functions-services.entrypoints=web"
 
       # apply middleware to route
-      - "traefik.http.routers.functions-services.middlewares=testHeader,fn-services-stripprefix"
+      - "traefik.http.routers.functions-services.middlewares=testHeader,fn-services-stripprefix,htransform"
 
   functions-bonus:
     image: io-functions-bonus
@@ -404,13 +405,17 @@ services:
       - io-fn
 
   traefik:
-    image: traefik:v2.0
+    image: traefik:v2.8
     command: |-
       --entrypoints.web.address=:80
+      --entrypoints.web.forwardedHeaders.insecure=true
       --entrypoints.websecure.address=:8080
+      --entrypoints.websecure.forwardedHeaders.insecure=true
       --providers.docker=true
       --providers.docker.network=io-fn
       --log.level=ERROR
+      --experimental.plugins.htransformation.modulename=github.com/tomMoulard/htransformation
+      --experimental.plugins.htransformation.version=v0.2.5
     ports:
       - ${API_GATEWAY_PORT}:${API_GATEWAY_PORT}
       - 8080:8080
@@ -422,7 +427,6 @@ services:
       # define middleware to be used in some functions services
       - "traefik.http.middlewares.testHeader.headers.customrequestheaders.x-user-id=unused"
       - "traefik.http.middlewares.testHeader.headers.customrequestheaders.x-user-groups=${REQ_USER_GROUPS}"
-      - "traefik.http.middlewares.testHeader.headers.customrequestheaders.x-subscription-id=${REQ_SERVICE_ID}"
       - "traefik.http.middlewares.testHeader.headers.customrequestheaders.x-user-email=unused@example.com"
       - "traefik.http.middlewares.testHeader.headers.customrequestheaders.x-user-note=unused"
       - "traefik.http.middlewares.testHeader.headers.customrequestheaders.x-functions-key=unused"
@@ -430,6 +434,17 @@ services:
       - "traefik.http.middlewares.fn-admin-stripprefix.stripprefix.prefixes=/functions-admin"
       - "traefik.http.middlewares.fn-app-stripprefix.stripprefix.prefixes=/functions-app"
       - "traefik.http.middlewares.fn-app-messages-stripprefix.stripprefix.prefixes=/functions-app-messages"
+      - "traefik.http.middlewares.htransform.plugin.htransformation.Rules[0].Header=x-subscription-id"
+      - "traefik.http.middlewares.htransform.plugin.htransformation.Rules[0].Name=test"
+      - "traefik.http.middlewares.htransform.plugin.htransformation.Rules[0].Type=Set"
+      - "traefik.http.middlewares.htransform.plugin.htransformation.Rules[0].Value=special"
+  whoami:
+    image: traefik/whoami
+    labels:
+      traefik.http.routers.whoami.rule: Host(`whoami.localhost`)
+      traefik.http.routers.whoami.middlewares: htransform
+    networks:
+      - io-fn
 
 networks:
   io-fn:
