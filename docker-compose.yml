@@ -425,26 +425,35 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     labels:
       # define middleware to be used in some functions services
+      - "traefik.http.middlewares.fn-services-stripprefix.stripprefix.prefixes=/functions-services"
+      - "traefik.http.middlewares.fn-admin-stripprefix.stripprefix.prefixes=/functions-admin"
+      - "traefik.http.middlewares.fn-app-stripprefix.stripprefix.prefixes=/functions-app"
+      - "traefik.http.middlewares.fn-app-messages-stripprefix.stripprefix.prefixes=/functions-app-messages"
+      # header transformations
+      # Rename rule from ocp-apim-subscription-key to x-subscription-id, this is needed to parametrize a service.
+      # for example, i can choose from multiple services with multiple characteristics based on the header i send.
+      # atm this middleware is only used in functions-services container and it supports 2 services: 
+      # 1 with SPECIAL category and 1 NON SPECIAL. to refer to them just set on ocp-apim-subscription-key header
+      # special or base 
+      - "traefik.http.middlewares.htransform.plugin.htransformation.Rules[0].Name=Rename_ocp-apim-subscription-key"
+      - "traefik.http.middlewares.htransform.plugin.htransformation.Rules[0].Header=^[Oo]cp-[Aa]pim-[Ss]ubscription-[Kk]ey$$"
+      - "traefik.http.middlewares.htransform.plugin.htransformation.Rules[0].Value=x-subscription-id"
+      - "traefik.http.middlewares.htransform.plugin.htransformation.Rules[0].Type=Rename"
+      ##
       - "traefik.http.middlewares.testHeader.headers.customrequestheaders.x-user-id=unused"
       - "traefik.http.middlewares.testHeader.headers.customrequestheaders.x-user-groups=${REQ_USER_GROUPS}"
       - "traefik.http.middlewares.testHeader.headers.customrequestheaders.x-user-email=unused@example.com"
       - "traefik.http.middlewares.testHeader.headers.customrequestheaders.x-user-note=unused"
       - "traefik.http.middlewares.testHeader.headers.customrequestheaders.x-functions-key=unused"
-      - "traefik.http.middlewares.fn-services-stripprefix.stripprefix.prefixes=/functions-services"
-      - "traefik.http.middlewares.fn-admin-stripprefix.stripprefix.prefixes=/functions-admin"
-      - "traefik.http.middlewares.fn-app-stripprefix.stripprefix.prefixes=/functions-app"
-      - "traefik.http.middlewares.fn-app-messages-stripprefix.stripprefix.prefixes=/functions-app-messages"
-      - "traefik.http.middlewares.htransform.plugin.htransformation.Rules[0].Header=x-subscription-id"
-      - "traefik.http.middlewares.htransform.plugin.htransformation.Rules[0].Name=test"
-      - "traefik.http.middlewares.htransform.plugin.htransformation.Rules[0].Type=Set"
-      - "traefik.http.middlewares.htransform.plugin.htransformation.Rules[0].Value=special"
-  whoami:
-    image: traefik/whoami
-    labels:
-      traefik.http.routers.whoami.rule: Host(`whoami.localhost`)
-      traefik.http.routers.whoami.middlewares: htransform
-    networks:
-      - io-fn
+
+  # FOR TRAEFIK DEBUG PURPOSES
+  # whoami:
+  #   image: traefik/whoami
+  #   labels:
+  #     traefik.http.routers.whoami.rule: Host(`whoami.localhost`)
+  #     traefik.http.routers.whoami.middlewares: htransform
+  #   networks:
+  #     - io-fn
 
 networks:
   io-fn:
