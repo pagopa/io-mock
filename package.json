@@ -23,6 +23,7 @@
     "generate:env-pagopa-nodo-mock": "dotenv -e generated-env/.env envsub env.io-pagopa-nodo-mock generated-env/env.io-pagopa-nodo-mock",
     "generate:env-fixtures": "dotenv -e generated-env/.env envsub env.io-fixtures generated-env/env.io-fixtures",
     "generate:env-cosmosdb": "dotenv -e generated-env/.env envsub env.cosmosdb generated-env/env.cosmosdb",
+    "generate:env-io-pn-mock": "dotenv -e generated-env/.env envsub env.io-pn-mock generated-env/env.io-pn-mock",
     "generate-spid-certs": "./scripts/generate-spid-certs.sh",
     "generate-test-certs": "./scripts/generate-test-certs.sh ./io-backend/certs",
     "prestart": "npm-run-all generate",

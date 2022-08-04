@@ -45,7 +45,7 @@
 					},
 					{
 						"key": "x-subscription-id",
-						"value": "MyServiceId",
+						"value": "base",
 						"type": "text",
 						"disabled": true
 					},

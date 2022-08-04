@@ -78,5 +78,10 @@
     "GITHUB_REPO": "https://api.github.com/repos/pagopa/io-functions-eucovidcerts/git/ref/heads/",
     "BRANCH": "master",
     "ENV_COMMIT_SHA": "FUNCTIONS_EUCOVIDCERTS_COMMIT_SHA"
+  },
+  {
+    "GITHUB_REPO": "https://api.github.com/repos/pagopa/io-pn-mock/git/ref/heads/",
+    "BRANCH": "master",
+    "ENV_COMMIT_SHA": "IO_PN_MOCK_COMMIT_SHA"
   }
 ]

@@ -1550,7 +1550,7 @@
 									"variable": [
 										{
 											"key": "service_id",
-											"value": "MyServiceId",
+											"value": "base",
 											"description": "(Required) The ID of an existing Service."
 										}
 									]
@@ -1767,7 +1767,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"authorized_cidrs\": [],\n    \"authorized_recipients\": [],\n    \"department_name\": \"Department - new\",\n    \"is_visible\": true,\n    \"max_allowed_payment_amount\": 4271,\n    \"organization_fiscal_code\": \"02001829766\",\n    \"organization_name\": \"Bashirian, Huel and Parker\",\n    \"require_secure_channels\": true,\n    \"service_id\": \"MyServiceId\",\n    \"service_metadata\": {\n        \"scope\": \"LOCAL\"\n    },\n    \"service_name\": \"drive\"\n}"
+									"raw": "{\n    \"authorized_cidrs\": [],\n    \"authorized_recipients\": [],\n    \"department_name\": \"Department - new\",\n    \"is_visible\": true,\n    \"max_allowed_payment_amount\": 4271,\n    \"organization_fiscal_code\": \"02001829766\",\n    \"organization_name\": \"Bashirian, Huel and Parker\",\n    \"require_secure_channels\": true,\n    \"service_id\": \"base\",\n    \"service_metadata\": {\n        \"scope\": \"LOCAL\"\n    },\n    \"service_name\": \"drive\"\n}"
 								},
 								"url": {
 									"raw": "{{baseUrl}}/services/:service_id",
@@ -2635,7 +2635,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"authorized_cidrs\": [],\n    \"authorized_recipients\": [],\n    \"department_name\": \"Department - new\",\n    \"is_visible\": true,\n    \"max_allowed_payment_amount\": 4271,\n    \"organization_fiscal_code\": \"02001829768\",\n    \"organization_name\": \"An ogranization Name\",\n    \"require_secure_channels\": true,\n    \"service_id\": \"MyServiceId\",\n    \"service_metadata\": {\n        \"scope\": \"LOCAL\"\n    },\n    \"service_name\": \"drive\"\n}"
+							"raw": "{\n    \"authorized_cidrs\": [],\n    \"authorized_recipients\": [],\n    \"department_name\": \"Department - new\",\n    \"is_visible\": true,\n    \"max_allowed_payment_amount\": 4271,\n    \"organization_fiscal_code\": \"02001829768\",\n    \"organization_name\": \"An ogranization Name\",\n    \"require_secure_channels\": true,\n    \"service_id\": \"base\",\n    \"service_metadata\": {\n        \"scope\": \"LOCAL\"\n    },\n    \"service_name\": \"drive\"\n}"
 						},
 						"url": {
 							"raw": "{{baseUrl}}/services",
@@ -3883,7 +3883,7 @@
 		},
 		{
 			"key": "service_id",
-			"value": "MyServiceId"
+			"value": "base"
 		},
 		{
 			"key": "organization_fiscal_code",

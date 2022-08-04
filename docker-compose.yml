@@ -1,4 +1,4 @@
-version: "3.2"
+version: "3.8"
 
 services:
   cosmosdb:
@@ -62,6 +62,24 @@ services:
     networks:
       - io-fn
 
+  io-pn-mock:
+    build:
+      context: ${IO_PN_MOCK_CONTEXT}
+      dockerfile: ./Dockerfile
+      args:
+        - IO_PN_MOCK_COMMIT_SHA
+    env_file:
+      - generated-env/env.io-pn-mock
+    ports:
+      - ${IO_PN_MOCK_PORT}:3004
+    networks: 
+      - io-fn
+    depends_on:
+      - cosmosdb
+      - fixtures
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    
   functions:
     image: functions
     build:
@@ -206,7 +224,7 @@ services:
       - "traefik.http.routers.functions-services.entrypoints=web"
 
       # apply middleware to route
-      - "traefik.http.routers.functions-services.middlewares=testHeader,fn-services-stripprefix"
+      - "traefik.http.routers.functions-services.middlewares=testHeader,fn-services-stripprefix,htransform"
 
   functions-bonus:
     image: io-functions-bonus
@@ -387,13 +405,17 @@ services:
       - io-fn
 
   traefik:
-    image: traefik:v2.0
+    image: traefik:v2.8
     command: |-
       --entrypoints.web.address=:80
+      --entrypoints.web.forwardedHeaders.insecure=true
       --entrypoints.websecure.address=:8080
+      --entrypoints.websecure.forwardedHeaders.insecure=true
       --providers.docker=true
       --providers.docker.network=io-fn
       --log.level=ERROR
+      --experimental.plugins.htransformation.modulename=github.com/tomMoulard/htransformation
+      --experimental.plugins.htransformation.version=v0.2.5
     ports:
       - ${API_GATEWAY_PORT}:${API_GATEWAY_PORT}
       - 8080:8080
@@ -403,16 +425,35 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     labels:
       # define middleware to be used in some functions services
-      - "traefik.http.middlewares.testHeader.headers.customrequestheaders.x-user-id=unused"
-      - "traefik.http.middlewares.testHeader.headers.customrequestheaders.x-user-groups=${REQ_USER_GROUPS}"
-      - "traefik.http.middlewares.testHeader.headers.customrequestheaders.x-subscription-id=${REQ_SERVICE_ID}"
-      - "traefik.http.middlewares.testHeader.headers.customrequestheaders.x-user-email=unused@example.com"
-      - "traefik.http.middlewares.testHeader.headers.customrequestheaders.x-user-note=unused"
-      - "traefik.http.middlewares.testHeader.headers.customrequestheaders.x-functions-key=unused"
       - "traefik.http.middlewares.fn-services-stripprefix.stripprefix.prefixes=/functions-services"
       - "traefik.http.middlewares.fn-admin-stripprefix.stripprefix.prefixes=/functions-admin"
       - "traefik.http.middlewares.fn-app-stripprefix.stripprefix.prefixes=/functions-app"
       - "traefik.http.middlewares.fn-app-messages-stripprefix.stripprefix.prefixes=/functions-app-messages"
+      # header transformations
+      # Rename rule from ocp-apim-subscription-key to x-subscription-id, this is needed to parametrize a service.
+      # for example, i can choose from multiple services with multiple characteristics based on the header i send.
+      # atm this middleware is only used in functions-services container and it supports 2 services: 
+      # 1 with SPECIAL category and 1 NON SPECIAL. to refer to them just set on ocp-apim-subscription-key header
+      # special or base 
+      - "traefik.http.middlewares.htransform.plugin.htransformation.Rules[0].Name=Rename_ocp-apim-subscription-key"
+      - "traefik.http.middlewares.htransform.plugin.htransformation.Rules[0].Header=^[Oo]cp-[Aa]pim-[Ss]ubscription-[Kk]ey$$"
+      - "traefik.http.middlewares.htransform.plugin.htransformation.Rules[0].Value=x-subscription-id"
+      - "traefik.http.middlewares.htransform.plugin.htransformation.Rules[0].Type=Rename"
+      ##
+      - "traefik.http.middlewares.testHeader.headers.customrequestheaders.x-user-id=unused"
+      - "traefik.http.middlewares.testHeader.headers.customrequestheaders.x-user-groups=${REQ_USER_GROUPS}"
+      - "traefik.http.middlewares.testHeader.headers.customrequestheaders.x-user-email=unused@example.com"
+      - "traefik.http.middlewares.testHeader.headers.customrequestheaders.x-user-note=unused"
+      - "traefik.http.middlewares.testHeader.headers.customrequestheaders.x-functions-key=unused"
+
+  # FOR TRAEFIK DEBUG PURPOSES
+  # whoami:
+  #   image: traefik/whoami
+  #   labels:
+  #     traefik.http.routers.whoami.rule: Host(`whoami.localhost`)
+  #     traefik.http.routers.whoami.middlewares: htransform
+  #   networks:
+  #     - io-fn
 
 networks:
   io-fn:
