@@ -11,7 +11,7 @@ Before launch the mock the first time, the following steps need to be completed:
 This is needed to access apps using Traefik virtual hosts. Add the following to your hosts file:
 
 ```ini
-127.0.0.1    backend.localhost functions-admin.localhost functions-app.localhost functions-public.localhost functions-services.localhost
+127.0.0.1 backend.localhost functions-admin.localhost functions-app.localhost functions-cgn.localhost functions-public.localhost functions-services.localhost pn-mock.localhost functions-app-messages.localhost functions-bonus.localhost functions-pushnotif.localhost functions-eucovidcerts.localhost spid-testenv2
 ```
 
 ### Setup environment values
@@ -84,7 +84,7 @@ In order to do that, add a `docker-compose.override.yml` file in the root dir of
 with the following content:
 
 ```yaml
-version: "3.2"
+version: "3.8"
 
 services:
   functions-admin:
@@ -143,7 +143,7 @@ Ensure that the VSCode debugger port (`5861` in the example above) match the one
 ## Run tests
 
 A set of Postman tests can be found in `postman-test-collections`.
-To run them, just run the mock enviroment and then call
+To run them, just run the mock environment and then call
 
 ``` bash
 yarn test
@@ -153,3 +153,6 @@ yarn test
 
 Create a new postman collection within `postman-test-collections` folder and add a new `"test:___` script in `package.json`
 
+### Notes
+
+On io-mock the difference from the standard backend and the internal one is absent, so the env variable `IS_APPBACKENDLI` is enabled by default to let `/notify` and `/lock` endpoints enabled.
