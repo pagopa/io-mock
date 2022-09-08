@@ -77,8 +77,13 @@ services:
     depends_on:
       - cosmosdb
       - fixtures
+    command: [ "yarn", "watch" ]
     extra_hosts:
       - host.docker.internal:host-gateway
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.pn-mock.rule=Host(`pn-mock.localhost`)"
+      - "traefik.http.routers.pn-mock.entrypoints=web"
     
   functions:
     image: functions
@@ -348,6 +353,8 @@ services:
       - io-fn
     volumes:
       - "./io-backend/certs:/usr/src/app/certs:cached"
+    extra_hosts:
+      - host.docker.internal:host-gateway
 
   # pagopa-proxy:
   #   image: io-pagopa-proxy
