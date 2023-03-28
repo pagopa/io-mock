@@ -27,8 +27,8 @@
     "generate-spid-certs": "./scripts/generate-spid-certs.sh",
     "generate-test-certs": "./scripts/generate-test-certs.sh ./io-backend/certs",
     "prestart": "npm-run-all generate",
-    "start": "docker-compose --env-file generated-env/.env up --build",
-    "stop": "docker-compose down",
+    "start": "docker compose --env-file generated-env/.env up --build",
+    "stop": "docker compose down",
     "test": "npm-run-all test:*",
     "test:functions-pushnotifications": "newman run postman-test-collections/fn-pushnotif-test.postman_collection.json",
     "test:functions-services": "newman run postman-test-collections/fn-services-test.postman_collection.json"
