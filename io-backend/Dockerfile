@@ -1,4 +1,4 @@
-FROM node:14.16.0-alpine
+FROM node:18.13.0-alpine
 
 RUN apk update && apk upgrade && \
   apk add --no-cache bash ca-certificates git openssh openssl
