@@ -8,3 +8,5 @@ node_modules
 docker-compose.override.yml
 .DS_Store
 *.http
+docker/redis-cluster/redis-cluster-data/*
+docker/redis-cluster/redis-node-*-data/*

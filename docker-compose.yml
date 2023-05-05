@@ -117,7 +117,7 @@ services:
     depends_on:
       - functions-node-14
       - traefik
-      - redis
+      - redis-cluster
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.functions-admin.rule=Host(`functions-admin.localhost`) || PathPrefix(`/functions-admin`)"
@@ -351,6 +351,8 @@ services:
     command: [ "yarn", "hot-reload" ]
     networks:
       - io-fn
+    depends_on:
+      - redis-cluster
     volumes:
       - "./io-backend/certs:/usr/src/app/certs:cached"
     extra_hosts:
@@ -390,17 +392,54 @@ services:
   #   depends_on:
   #     - pagopa-proxy
 
-  redis:
-    container_name: redis
-    image: wodby/redis:3.2-2.1.5
-    ports:
-      - "6379:6379"
-    environment:
-      REDIS_TIMEOUT: 300
-      REDIS_TCP_KEEPALIVE: 60
-      REDIS_MAXMEMORY: 182m
+  redis-node-0:
+    image: docker.io/bitnami/redis-cluster:6.0
     networks:
       - io-fn
+    volumes:
+      - ./docker/redis-cluster/redis-node-0-data:/bitnami/redis/data
+    environment:
+      - 'REDIS_PASSWORD=bitnami'
+      - 'REDIS_NODES=redis-node-0 redis-node-1 redis-node-2 redis-cluster'
+
+  redis-node-1:
+    image: docker.io/bitnami/redis-cluster:6.0
+    networks:
+      - io-fn
+    volumes:
+      - ./docker/redis-cluster/redis-node-1-data:/bitnami/redis/data
+    environment:
+      - 'REDIS_PASSWORD=bitnami'
+      - 'REDIS_NODES=redis-node-0 redis-node-1 redis-node-2 redis-cluster'
+
+  redis-node-2:
+    image: docker.io/bitnami/redis-cluster:6.0
+    networks:
+      - io-fn
+    volumes:
+      - ./docker/redis-cluster/redis-node-2-data:/bitnami/redis/data
+    environment:
+      - 'REDIS_PASSWORD=bitnami'
+      - 'REDIS_NODES=redis-node-0 redis-node-1 redis-node-2 redis-cluster'
+
+  redis-cluster:
+    image: docker.io/bitnami/redis-cluster:6.0
+    networks:
+      - io-fn
+    ports:
+        - 6379:6379
+    volumes:
+      - ./docker/redis-cluster/redis-cluster-data:/bitnami/redis/data
+    depends_on:
+      - redis-node-0
+      - redis-node-1
+      - redis-node-2
+    environment:
+      - 'REDIS_PASSWORD=bitnami'
+      - 'REDISCLI_AUTH=bitnami'
+      - 'REDIS_CLUSTER_REPLICAS=0'
+      - 'REDIS_NODES=redis-node-0 redis-node-1 redis-node-2 redis-cluster'
+      - 'REDIS_CLUSTER_CREATOR=yes'
 
   spid-testenv2:
     container_name: spid-testenv2
@@ -423,7 +462,7 @@ services:
   traefik:
     image: traefik:v2.8
     command: |-
-      --entrypoints.web.address=:80
+      --entrypoints.web.address=:81
       --entrypoints.web.forwardedHeaders.insecure=true
       --entrypoints.websecure.address=:8080
       --entrypoints.websecure.forwardedHeaders.insecure=true
@@ -471,8 +510,11 @@ services:
   #   networks:
   #     - io-fn
 
+
 networks:
   io-fn:
     driver: bridge
     driver_opts:
       com.docker.network.driver.mtu: 1450
+
+
