@@ -99,6 +99,13 @@ services:
       dockerfile: functions-node-14/Dockerfile
     command: /bin/true
 
+  functions-node-18:
+    image: functions-node-18
+    build:
+      context: ./
+      dockerfile: functions-node-18/Dockerfile
+    command: /bin/true
+
   functions-admin:
     image: io-functions-admin
     build:
@@ -144,7 +151,7 @@ services:
     networks:
       - io-fn
     depends_on:
-      - functions-node-14
+      - functions-node-18
       - notificationhub
       - fixtures
       - traefik
@@ -402,6 +409,125 @@ services:
     networks:
       - io-fn
 
+
+  #
+  #                   __ __            __             __ 
+  #   .----.-----.--|  |__.-----.----|  .--.--.-----|  |_.-----.----.
+  #  |   _|  -__|  _  |  |__ --|  __|  |  |  |__ --|   _|  -__|   _|
+  # |__| |_____|_____|__|_____|____|__|_____|_____|____|_____|__|
+  #
+  #
+  redis-node-0:
+    image: docker.io/bitnami/redis-cluster:6.2
+    networks:
+      - io-fn
+    ports:
+      - 6380:6379
+    volumes:
+      - redis-node-0-data:/bitnami/redis/data
+    environment:
+      - 'REDIS_PASSWORD=bitnami'
+      - 'REDIS_NODES=redis-cluster redis-node-0 redis-node-1 redis-node-2 redis-node-3 redis-node-4 redis-node-5 redis-node-6'
+
+  redis-node-1:
+    image: docker.io/bitnami/redis-cluster:6.2
+    networks:
+      - io-fn
+    ports:
+      - 6381:6379
+    volumes:
+      - redis-node-1-data:/bitnami/redis/data
+    environment:
+      - 'REDIS_PASSWORD=bitnami'
+      - 'REDIS_NODES=redis-cluster redis-node-0 redis-node-1 redis-node-2 redis-node-3 redis-node-4 redis-node-5 redis-node-6'
+
+  redis-node-2:
+    image: docker.io/bitnami/redis-cluster:6.2
+    networks:
+      - io-fn
+    ports:
+        - 6382:6379
+    volumes:
+      - redis-node-2-data:/bitnami/redis/data
+    environment:
+      - 'REDIS_PASSWORD=bitnami'
+      - 'REDIS_NODES=redis-cluster redis-node-0 redis-node-1 redis-node-2 redis-node-3 redis-node-4 redis-node-5 redis-node-6'
+
+  redis-node-3:
+    image: docker.io/bitnami/redis-cluster:6.2
+    networks:
+      - io-fn
+    ports:
+        - 6383:6379
+    volumes:
+      - redis-node-3-data:/bitnami/redis/data
+    environment:
+      - 'REDIS_PASSWORD=bitnami'
+      - 'REDIS_NODES=redis-cluster redis-node-0 redis-node-1 redis-node-2 redis-node-3 redis-node-4 redis-node-5 redis-node-6'
+
+  redis-node-4:
+    image: docker.io/bitnami/redis-cluster:6.2
+    networks:
+      - io-fn
+    ports:
+        - 6384:6379
+    volumes:
+      - redis-node-4-data:/bitnami/redis/data
+    environment:
+      - 'REDIS_PASSWORD=bitnami'
+      - 'REDIS_NODES=redis-cluster redis-node-0 redis-node-1 redis-node-2 redis-node-3 redis-node-4 redis-node-5 redis-node-6'
+
+  redis-node-5:
+    image: docker.io/bitnami/redis-cluster:6.2
+    networks:
+      - io-fn
+    ports:
+        - 6385:6379
+    volumes:
+      - redis-node-5-data:/bitnami/redis/data
+    environment:
+      - 'REDIS_PASSWORD=bitnami'
+      - 'REDIS_NODES=redis-cluster redis-node-0 redis-node-1 redis-node-2 redis-node-3 redis-node-4 redis-node-5 redis-node-6'
+
+  redis-node-6:
+    image: docker.io/bitnami/redis-cluster:6.2
+    networks:
+      - io-fn
+    ports:
+        - 6386:6379
+    volumes:
+      - redis-node-6-data:/bitnami/redis/data
+    environment:
+      - 'REDIS_PASSWORD=bitnami'
+      - 'REDIS_NODES=redis-cluster redis-node-0 redis-node-1 redis-node-2 redis-node-3 redis-node-4 redis-node-5 redis-node-6'
+
+  redis-cluster:
+    image: docker.io/bitnami/redis-cluster:6.2
+    networks:
+      - io-fn
+    ports:
+        - 6379:6379
+    volumes:
+      - redis-cluster-data:/bitnami/redis/data
+    depends_on:
+      - redis-node-0
+      - redis-node-1
+      - redis-node-2
+      - redis-node-3
+      - redis-node-4
+      - redis-node-5
+      - redis-node-6
+    environment:
+      - 'REDIS_PASSWORD=bitnami'
+      - 'REDISCLI_AUTH=bitnami'
+      - 'REDIS_CLUSTER_REPLICAS=1'
+      - 'REDIS_NODES=redis-cluster redis-node-0 redis-node-1 redis-node-2 redis-node-3 redis-node-4 redis-node-5 redis-node-6'
+      - 'REDIS_CLUSTER_CREATOR=yes'
+  #
+  #
+  #
+  #
+
   spid-testenv2:
     container_name: spid-testenv2
     image: italia/spid-testenv2
@@ -476,3 +602,13 @@ networks:
     driver: bridge
     driver_opts:
       com.docker.network.driver.mtu: 1450
+
+volumes:
+    redis-node-0-data:
+    redis-node-1-data:
+    redis-node-2-data:
+    redis-node-3-data:
+    redis-node-4-data:
+    redis-node-5-data:
+    redis-node-6-data:
+    redis-cluster-data:
