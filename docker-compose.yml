@@ -145,7 +145,6 @@ services:
       - io-fn
     depends_on:
       - functions-node-14
-      - notificationhub
       - fixtures
       - traefik
     labels:
@@ -392,53 +391,127 @@ services:
   #   depends_on:
   #     - pagopa-proxy
 
+
+
+
+  testagent:
+    image: node:18-alpine
+    working_dir: /usr/src/app
+    command: tail -f /dev/null # to keep it   up&running
+    depends_on:
+      - redis-cluster
+
+
   redis-node-0:
-    image: docker.io/bitnami/redis-cluster:6.0
-    networks:
-      - io-fn
-    volumes:
-      - ./docker/redis-cluster/redis-node-0-data:/bitnami/redis/data
-    environment:
-      - 'REDIS_PASSWORD=bitnami'
-      - 'REDIS_NODES=redis-node-0 redis-node-1 redis-node-2 redis-cluster'
-
-  redis-node-1:
-    image: docker.io/bitnami/redis-cluster:6.0
-    networks:
-      - io-fn
-    volumes:
-      - ./docker/redis-cluster/redis-node-1-data:/bitnami/redis/data
-    environment:
-      - 'REDIS_PASSWORD=bitnami'
-      - 'REDIS_NODES=redis-node-0 redis-node-1 redis-node-2 redis-cluster'
-
-  redis-node-2:
-    image: docker.io/bitnami/redis-cluster:6.0
-    networks:
-      - io-fn
-    volumes:
-      - ./docker/redis-cluster/redis-node-2-data:/bitnami/redis/data
-    environment:
-      - 'REDIS_PASSWORD=bitnami'
-      - 'REDIS_NODES=redis-node-0 redis-node-1 redis-node-2 redis-cluster'
-
-  redis-cluster:
-    image: docker.io/bitnami/redis-cluster:6.0
+    image: docker.io/bitnami/redis-cluster:6.2.12
     networks:
       - io-fn
     ports:
-        - 6379:6379
+      - 6380:6380
     volumes:
-      - ./docker/redis-cluster/redis-cluster-data:/bitnami/redis/data
+      - redis-node-0-data:/bitnami/redis/data
+    environment:
+      - 'REDIS_PORT_NUMBER=6380'
+      - 'REDIS_PASSWORD=bitnami'
+      - 'REDIS_NODES=redis-cluster redis-node-0:6380 redis-node-1:6381 redis-node-2:6382 redis-node-3:6383 redis-node-4:6384 redis-node-5:6385 redis-node-6:6386'
+
+  redis-node-1:
+    image: docker.io/bitnami/redis-cluster:6.2.12
+    networks:
+      - io-fn
+    ports:
+      - 6381:6381
+    volumes:
+      - redis-node-1-data:/bitnami/redis/data
+    environment:
+      - 'REDIS_PORT_NUMBER=6381'
+      - 'REDIS_PASSWORD=bitnami'
+      - 'REDIS_NODES=redis-cluster redis-node-0:6380 redis-node-1:6381 redis-node-2:6382 redis-node-3:6383 redis-node-4:6384 redis-node-5:6385 redis-node-6:6386'
+
+  redis-node-2:
+    image: docker.io/bitnami/redis-cluster:6.2.12
+    networks:
+      - io-fn
+    ports:
+      - 6382:6382
+    volumes:
+      - redis-node-2-data:/bitnami/redis/data
+    environment:
+      - 'REDIS_PORT_NUMBER=6382'
+      - 'REDIS_PASSWORD=bitnami'
+      - 'REDIS_NODES=redis-cluster redis-node-0:6380 redis-node-1:6381 redis-node-2:6382 redis-node-3:6383 redis-node-4:6384 redis-node-5:6385 redis-node-6:6386'
+
+  redis-node-3:
+    image: docker.io/bitnami/redis-cluster:6.2.12
+    networks:
+      - io-fn
+    ports:
+      - 6383:6383
+    volumes:
+      - redis-node-3-data:/bitnami/redis/data
+    environment:
+      - 'REDIS_PORT_NUMBER=6383'
+      - 'REDIS_PASSWORD=bitnami'
+      - 'REDIS_NODES=redis-cluster redis-node-0:6380 redis-node-1:6381 redis-node-2:6382 redis-node-3:6383 redis-node-4:6384 redis-node-5:6385 redis-node-6:6386'
+  redis-node-4:
+    image: docker.io/bitnami/redis-cluster:6.2.12
+    networks:
+      - io-fn
+    ports:
+      - 6384:6384
+    volumes:
+      - redis-node-4-data:/bitnami/redis/data
+    environment:
+      - 'REDIS_PORT_NUMBER=6384'
+      - 'REDIS_PASSWORD=bitnami'
+      - 'REDIS_NODES=redis-cluster redis-node-0:6380 redis-node-1:6381 redis-node-2:6382 redis-node-3:6383 redis-node-4:6384 redis-node-5:6385 redis-node-6:6386'
+
+  redis-node-5:
+    image: docker.io/bitnami/redis-cluster:6.2.12
+    networks:
+      - io-fn
+    ports:
+      - 6385:6385
+    volumes:
+      - redis-node-5-data:/bitnami/redis/data
+    environment:
+      - 'REDIS_PORT_NUMBER=6385'
+      - 'REDIS_PASSWORD=bitnami'
+      - 'REDIS_NODES=redis-cluster redis-node-0:6380 redis-node-1:6381 redis-node-2:6382 redis-node-3:6383 redis-node-4:6384 redis-node-5:6385 redis-node-6:6386'
+  redis-node-6:
+    image: docker.io/bitnami/redis-cluster:6.2.12
+    networks:
+      - io-fn
+    ports:
+      - 6386:6386
+    volumes:
+      - redis-node-6-data:/bitnami/redis/data
+    environment:
+      - 'REDIS_PORT_NUMBER=6386'
+      - 'REDIS_PASSWORD=bitnami'
+      - 'REDIS_NODES=redis-cluster redis-node-0:6380 redis-node-1:6381 redis-node-2:6382 redis-node-3:6383 redis-node-4:6384 redis-node-5:6385 redis-node-6:6386'
+
+  redis-cluster:
+    image: docker.io/bitnami/redis-cluster:6.2.12
+    networks:
+      - io-fn
+    ports:
+      - 6379:6379
+    volumes:
+      - redis-cluster-data:/bitnami/redis/data
     depends_on:
       - redis-node-0
       - redis-node-1
       - redis-node-2
+      - redis-node-3
+      - redis-node-4
+      - redis-node-5
+      - redis-node-6
     environment:
       - 'REDIS_PASSWORD=bitnami'
       - 'REDISCLI_AUTH=bitnami'
-      - 'REDIS_CLUSTER_REPLICAS=0'
-      - 'REDIS_NODES=redis-node-0 redis-node-1 redis-node-2 redis-cluster'
+      - 'REDIS_CLUSTER_REPLICAS=1'
+      - 'REDIS_NODES=redis-cluster redis-node-0:6380 redis-node-1:6381 redis-node-2:6382 redis-node-3:6383 redis-node-4:6384 redis-node-5:6385 redis-node-6:6386'
       - 'REDIS_CLUSTER_CREATOR=yes'
 
   spid-testenv2:
@@ -510,6 +583,15 @@ services:
   #   networks:
   #     - io-fn
 
+volumes:
+  redis-node-0-data:
+  redis-node-1-data:
+  redis-node-2-data:
+  redis-node-3-data:
+  redis-node-4-data:
+  redis-node-5-data:
+  redis-node-6-data:
+  redis-cluster-data:
 
 networks:
   io-fn:
