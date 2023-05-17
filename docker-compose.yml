@@ -124,7 +124,6 @@ services:
     depends_on:
       - functions-node-14
       - traefik
-      - redis
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.functions-admin.rule=Host(`functions-admin.localhost`) || PathPrefix(`/functions-admin`)"
@@ -152,7 +151,6 @@ services:
       - io-fn
     depends_on:
       - functions-node-18
-      - notificationhub
       - fixtures
       - traefik
     labels:
@@ -397,17 +395,6 @@ services:
   #   depends_on:
   #     - pagopa-proxy
 
-  redis:
-    container_name: redis
-    image: wodby/redis:3.2-2.1.5
-    ports:
-      - "6379:6379"
-    environment:
-      REDIS_TIMEOUT: 300
-      REDIS_TCP_KEEPALIVE: 60
-      REDIS_MAXMEMORY: 182m
-    networks:
-      - io-fn
 
 
   #
