@@ -49,11 +49,14 @@ Database and storage are shared among each application in the mock.
 | COSMOSDB_KEY              | Account Key for the Azure Cosmosdb instance used by this mock |
 | COSMOSDB_NAME             | Name of the database used by this mock                        |
 
-### Private package registry
+### Github token
 
-| name         | description                                       |
-| ------------ | ------------------------------------------------- |
-| GITHUB_TOKEN | Auth token to access our private Github registry. |
+On `.env`, make sure you put a GITHUB_TOKEN variable to let the script take all the repos commit digest of the selected branches.
+The token is also needed to access our private registry.
+
+| name         | description        |
+| ------------ | ------------------ |
+| GITHUB_TOKEN | Github Auth token. |
 
 ### Generate new SPID certs and metadata
 This is useful when the provided ones are expired.
