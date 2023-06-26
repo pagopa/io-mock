@@ -9,6 +9,7 @@
     "generate:env": "node bin/index.js .env generated-env/.env",
     "generate:env-functions-app": "dotenv -e generated-env/.env envsub env.io-functions-app generated-env/env.io-functions-app",
     "generate:env-functions-app-messages": "dotenv -e generated-env/.env envsub env.io-functions-app-messages generated-env/env.io-functions-app-messages",
+    "generate:env-functions-lollipop": "dotenv -e generated-env/.env envsub env.io-functions-lollipop generated-env/env.io-functions-lollipop",
     "generate:env-functions-public": "dotenv -e generated-env/.env envsub env.io-functions-public generated-env/env.io-functions-public",
     "generate:env-functions-admin": "dotenv -e generated-env/.env envsub env.io-functions-admin generated-env/env.io-functions-admin",
     "generate:env-functions-services": "dotenv -e generated-env/.env envsub env.io-functions-services generated-env/env.io-functions-services",

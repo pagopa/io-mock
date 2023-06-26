@@ -15,6 +15,11 @@
     "ENV_COMMIT_SHA": "FUNCTIONS_APP_MESSAGES_COMMIT_SHA"
   },
   {
+    "GITHUB_REPO": "https://api.github.com/repos/pagopa/io-functions-lollipop/git/ref/heads/",
+    "BRANCH": "master",
+    "ENV_COMMIT_SHA": "FUNCTIONS_LOLLIPOP_COMMIT_SHA"
+  },
+  {
     "GITHUB_REPO": "https://api.github.com/repos/pagopa/io-functions-public/git/ref/heads/",
     "BRANCH": "master",
     "ENV_COMMIT_SHA": "FUNCTIONS_PUBLIC_COMMIT_SHA"
