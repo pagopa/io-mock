@@ -72,7 +72,7 @@ services:
       - generated-env/env.io-pn-mock
     ports:
       - ${IO_PN_MOCK_PORT}:3004
-    networks: 
+    networks:
       - io-fn
     depends_on:
       - cosmosdb
@@ -84,7 +84,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.pn-mock.rule=Host(`pn-mock.localhost`)"
       - "traefik.http.routers.pn-mock.entrypoints=web"
-    
+
   functions:
     image: functions
     build:
@@ -192,6 +192,34 @@ services:
     extra_hosts:
       - host.docker.internal:host-gateway
 
+  functions-lollipop:
+    image: io-functions-lollipop
+    build:
+      context: ${FUNCTIONS_LOLLIPOP_CONTEXT}
+      dockerfile: ./Dockerfile
+      args:
+        - FUNCTIONS_LOLLIPOP_COMMIT_SHA
+    env_file:
+      - generated-env/env.cosmosdb
+      - generated-env/env.io-functions-lollipop
+    working_dir: /usr/src/app
+    ports:
+      - ${FUNCTIONS_LOLLIPOP_PORT}:7071
+    networks:
+      - io-fn
+    depends_on:
+      - functions-node-18
+      - traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.functions-lollipop.rule=Host(`functions-lollipop.localhost`) || PathPrefix(`/functions-lollipop`)"
+      - "traefik.http.routers.functions-lollipop.entrypoints=websecure"
+      - "traefik.http.routers.functions-lollipop.tls=true"
+      # apply middleware to route
+      - "traefik.http.routers.functions-lollipop.middlewares=fn-lollipop-stripprefix"
+    extra_hosts:
+      - host.docker.internal:host-gateway
+
   functions-public:
     image: io-functions-public
     build:
@@ -243,7 +271,6 @@ services:
       - "traefik.http.routers.functions-services.middlewares=testHeader,fn-services-stripprefix,htransform"
     extra_hosts:
       - host.docker.internal:host-gateway
-
 
   functions-bonus:
     image: io-functions-bonus
@@ -354,6 +381,12 @@ services:
       - ${IO_BACKEND_PORT}:443
       - "5859:5859"
     command: [ "yarn", "hot-reload" ]
+    depends_on:
+      - redis-cluster
+      - spid-testenv2
+      - functions-app
+      - functions-lollipop
+      - traefik
     networks:
       - io-fn
     volumes:
@@ -433,7 +466,7 @@ services:
     networks:
       - io-fn
     ports:
-        - 6382:6379
+      - 6382:6379
     volumes:
       - redis-node-2-data:/bitnami/redis/data
     environment:
@@ -445,7 +478,7 @@ services:
     networks:
       - io-fn
     ports:
-        - 6383:6379
+      - 6383:6379
     volumes:
       - redis-node-3-data:/bitnami/redis/data
     environment:
@@ -457,7 +490,7 @@ services:
     networks:
       - io-fn
     ports:
-        - 6384:6379
+      - 6384:6379
     volumes:
       - redis-node-4-data:/bitnami/redis/data
     environment:
@@ -469,7 +502,7 @@ services:
     networks:
       - io-fn
     ports:
-        - 6385:6379
+      - 6385:6379
     volumes:
       - redis-node-5-data:/bitnami/redis/data
     environment:
@@ -481,7 +514,7 @@ services:
     networks:
       - io-fn
     ports:
-        - 6386:6379
+      - 6386:6379
     volumes:
       - redis-node-6-data:/bitnami/redis/data
     environment:
@@ -493,7 +526,7 @@ services:
     networks:
       - io-fn
     ports:
-        - 6379:6379
+      - 6379:6379
     volumes:
       - redis-cluster-data:/bitnami/redis/data
     depends_on:
@@ -558,6 +591,7 @@ services:
       - "traefik.http.middlewares.fn-admin-stripprefix.stripprefix.prefixes=/functions-admin"
       - "traefik.http.middlewares.fn-app-stripprefix.stripprefix.prefixes=/functions-app"
       - "traefik.http.middlewares.fn-app-messages-stripprefix.stripprefix.prefixes=/functions-app-messages"
+      - "traefik.http.middlewares.fn-lollipop-stripprefix.stripprefix.prefixes=/functions-lollipop"
       # header transformations
       # Rename rule from ocp-apim-subscription-key to x-subscription-id, this is needed to parametrize a service.
       # for example, i can choose from multiple services with multiple characteristics based on the header i send.
@@ -574,7 +608,6 @@ services:
       - "traefik.http.middlewares.testHeader.headers.customrequestheaders.x-user-email=unused@example.com"
       - "traefik.http.middlewares.testHeader.headers.customrequestheaders.x-user-note=unused"
       - "traefik.http.middlewares.testHeader.headers.customrequestheaders.x-functions-key=unused"
-
   # FOR TRAEFIK DEBUG PURPOSES
   # whoami:
   #   image: traefik/whoami
@@ -591,11 +624,11 @@ networks:
       com.docker.network.driver.mtu: 1450
 
 volumes:
-    redis-node-0-data:
-    redis-node-1-data:
-    redis-node-2-data:
-    redis-node-3-data:
-    redis-node-4-data:
-    redis-node-5-data:
-    redis-node-6-data:
-    redis-cluster-data:
+  redis-node-0-data:
+  redis-node-1-data:
+  redis-node-2-data:
+  redis-node-3-data:
+  redis-node-4-data:
+  redis-node-5-data:
+  redis-node-6-data:
+  redis-cluster-data:
