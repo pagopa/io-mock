@@ -4,9 +4,8 @@
   "repository": "git@github.com:pagopa/io-mock.git",
   "license": "MIT",
   "scripts": {
-    "clean": "shx rm -rf generated-env && shx mkdir generated-env",
-    "generate": "npm-run-all clean generate:*",
-    "generate:env": "node bin/index.js .env generated-env/.env",
+    "pregenerate": "shx rm -rf generated-env && shx mkdir generated-env && node bin/index.js .env generated-env/.env",
+    "generate": "npm-run-all -p generate:*",
     "generate:env-functions-app": "dotenv -e generated-env/.env envsub env.io-functions-app generated-env/env.io-functions-app",
     "generate:env-functions-app-messages": "dotenv -e generated-env/.env envsub env.io-functions-app-messages generated-env/env.io-functions-app-messages",
     "generate:env-functions-lollipop": "dotenv -e generated-env/.env envsub env.io-functions-lollipop generated-env/env.io-functions-lollipop",
