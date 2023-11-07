@@ -120,7 +120,7 @@ services:
     networks:
       - io-fn
     depends_on:
-      - functions-node-14
+      - functions-node-18
       - traefik
     labels:
       - "traefik.enable=true"
