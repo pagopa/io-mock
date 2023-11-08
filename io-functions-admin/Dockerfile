@@ -1,4 +1,4 @@
-FROM functions-node-14
+FROM functions-node-18
 
 ARG FUNCTIONS_ADMIN_COMMIT_SHA
 

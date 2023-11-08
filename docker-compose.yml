@@ -78,8 +78,6 @@ services:
       - cosmosdb
       - fixtures
     command: [ "yarn", "watch" ]
-    extra_hosts:
-      - host.docker.internal:host-gateway
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.pn-mock.rule=Host(`pn-mock.localhost`)"
@@ -122,7 +120,7 @@ services:
     networks:
       - io-fn
     depends_on:
-      - functions-node-14
+      - functions-node-18
       - traefik
     labels:
       - "traefik.enable=true"
@@ -131,8 +129,6 @@ services:
 
       # apply middleware to route
       - "traefik.http.routers.functions-admin.middlewares=testHeader,fn-admin-stripprefix"
-    extra_hosts:
-      - host.docker.internal:host-gateway
 
   functions-app:
     image: io-functions-app
@@ -160,8 +156,6 @@ services:
       - "traefik.http.routers.functions-app.tls=true"
       # apply middleware to route
       - "traefik.http.routers.functions-app.middlewares=fn-app-stripprefix"
-    extra_hosts:
-      - host.docker.internal:host-gateway
 
   functions-app-messages:
     image: io-functions-app-messages
@@ -189,8 +183,6 @@ services:
       - "traefik.http.routers.functions-app-messages.tls=true"
       # apply middleware to route
       - "traefik.http.routers.functions-app-messages.middlewares=fn-app-messages-stripprefix"
-    extra_hosts:
-      - host.docker.internal:host-gateway
 
   functions-lollipop:
     image: io-functions-lollipop
@@ -217,8 +209,6 @@ services:
       - "traefik.http.routers.functions-lollipop.tls=true"
       # apply middleware to route
       - "traefik.http.routers.functions-lollipop.middlewares=fn-lollipop-stripprefix"
-    extra_hosts:
-      - host.docker.internal:host-gateway
 
   functions-public:
     image: io-functions-public
@@ -269,8 +259,6 @@ services:
 
       # apply middleware to route
       - "traefik.http.routers.functions-services.middlewares=testHeader,fn-services-stripprefix,htransform"
-    extra_hosts:
-      - host.docker.internal:host-gateway
 
   functions-bonus:
     image: io-functions-bonus
@@ -391,8 +379,6 @@ services:
       - io-fn
     volumes:
       - "./io-backend/certs:/usr/src/app/certs:cached"
-    extra_hosts:
-      - host.docker.internal:host-gateway
 
   # pagopa-proxy:
   #   image: io-pagopa-proxy
