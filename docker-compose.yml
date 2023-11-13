@@ -369,7 +369,6 @@ services:
       - ${IO_BACKEND_PORT}:443
       - "5859:5859"
     command: [ "yarn", "hot-reload" ]
-    command: ["yarn", "hot-reload"]
     depends_on:
       - redis-cluster
       - spid-testenv2
