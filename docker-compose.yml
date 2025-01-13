@@ -104,6 +104,13 @@ services:
       dockerfile: functions-node-18/Dockerfile
     command: /bin/true
 
+  functions-node-20:
+    image: functions-node-20
+    build:
+      context: ./
+      dockerfile: functions-node-20/Dockerfile
+    command: /bin/true
+
   functions-admin:
     image: io-functions-admin
     build:
@@ -120,7 +127,7 @@ services:
     networks:
       - io-fn
     depends_on:
-      - functions-node-18
+      - functions-node-20
       - traefik
     labels:
       - "traefik.enable=true"
