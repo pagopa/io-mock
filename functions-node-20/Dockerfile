@@ -1,8 +1,6 @@
-FROM node:18.13.0
+FROM node:20.12.2
 
 WORKDIR /usr/src/app
-
-RUN apt-get install git
 
 RUN npm i -g azure-functions-core-tools@4 --unsafe-perm true
 
