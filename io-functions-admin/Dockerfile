@@ -8,4 +8,4 @@ RUN git clone https://github.com/pagopa/io-functions-admin.git /usr/src/app && \
   yarn build && \
   func extensions install
 
-CMD ["func", "start", "--javascript", "--verbose"]
+CMD ["func", "start", "--javascript"]
