@@ -1,4 +1,4 @@
-FROM node:18.13.0-alpine
+FROM node:20.17.0-alpine
 
 RUN apk update && apk upgrade && \
   apk add --no-cache bash ca-certificates git openssh openssl
@@ -14,7 +14,7 @@ RUN rm -rf * && \
   git checkout $IO_BACKEND_COMMIT_SHA
 
 RUN yarn install --frozen-lockfile && \
-  yarn generate:proxy-models && \
+  yarn generate && \
   yarn build
 
 EXPOSE 443
