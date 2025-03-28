@@ -14,7 +14,7 @@ RUN rm -rf * && \
   git checkout $IO_BACKEND_COMMIT_SHA
 
 RUN yarn install --frozen-lockfile && \
-  yarn generate:proxy-models && \
+  yarn generate && \
   yarn build
 
 EXPOSE 443
